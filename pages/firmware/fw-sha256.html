@@ -1,0 +1,259 @@
+<!-- FW & SHA256 模組 HTML -->
+<div class="firmware-container">
+  <h2>🔧 Download FW & SHA256</h2>
+
+  <!-- 產品選擇區塊 -->
+  <div class="form-section">
+    <label for="fwProductSelect">選擇產品型號:</label>
+    <select id="fwProductSelect" class="form-input">
+      <option value="">🔄 Loading product data...</option>
+    </select>
+  </div>
+
+  <!-- 固件路徑區塊 -->
+  <div class="form-section">
+    <label for="fwPath">固件路徑:</label>
+    <div class="input-group">
+      <input type="text" id="fwPath" class="form-input" placeholder="Select a product to generate firmware path..."
+        readonly>
+      <button id="fwEditBtn" class="edit-btn" onclick="toggleFwEditMode()" title="Toggle edit mode">✏️ Edit</button>
+    </div>
+  </div>
+
+  <!-- SHA256 檔案路徑區塊 -->
+  <div class="form-section">
+    <label for="sha256Path">SHA256 檔案路徑:</label>
+    <div class="input-group">
+      <input type="text" id="sha256Path" class="form-input" placeholder="SHA256 file path will be generated..."
+        readonly>
+      <button class="copy-btn" onclick="copyToClipboard('sha256Path')" title="Copy to clipboard">📋</button>
+    </div>
+  </div>
+
+  <!-- 下載連結區塊 -->
+  <div class="form-section">
+    <label>下載連結:</label>
+    <div class="download-links">
+      <div class="link-item">
+        <span>固件檔案:</span>
+        <a id="fwDownloadLink" href="#" target="_blank" class="download-link">點擊下載固件</a>
+        <button class="copy-btn" onclick="copyDownloadLink('fw')" title="Copy firmware download link">📋</button>
+      </div>
+      <div class="link-item">
+        <span>SHA256 檔案:</span>
+        <a id="sha256DownloadLink" href="#" target="_blank" class="download-link">點擊下載SHA256</a>
+        <button class="copy-btn" onclick="copyDownloadLink('sha256')" title="Copy SHA256 download link">📋</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 預覽區塊 -->
+  <div id="fwPreviewSection" class="preview-section hidden">
+    <h3>📋 下載資訊預覽</h3>
+    <div class="preview-content">
+      <div class="preview-item">
+        <span class="preview-label">產品型號:</span>
+        <span id="fwPreviewProduct" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('fwPreviewProduct')" title="Copy">📋</button>
+      </div>
+      <div class="preview-item">
+        <span class="preview-label">固件檔名:</span>
+        <span id="fwPreviewFilename" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('fwPreviewFilename')" title="Copy">📋</button>
+      </div>
+      <div class="preview-item">
+        <span class="preview-label">SHA256 檔名:</span>
+        <span id="fwPreviewSha256" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('fwPreviewSha256')" title="Copy">📋</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 動作按鈕 -->
+  <div class="button-group">
+    <button id="fwGenerateBtn" class="primary-btn" onclick="generateDownloadLinks()" disabled>
+      🚀 生成下載連結
+    </button>
+    <button class="secondary-btn" onclick="resetFwForm()">
+      🔄 重設
+    </button>
+  </div>
+</div>
+
+<style>
+  .firmware-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .form-section {
+    margin-bottom: 20px;
+  }
+
+  .form-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  .input-group .form-input {
+    flex: 1;
+  }
+
+  .edit-btn,
+  .copy-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s;
+  }
+
+  .edit-btn {
+    background: #6c757d;
+    color: white;
+  }
+
+  .edit-btn.confirmed {
+    background: #28a745;
+  }
+
+  .copy-btn {
+    background: #17a2b8;
+    color: white;
+  }
+
+  .copy-btn.small {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .copy-btn:hover {
+    background: #138496;
+  }
+
+  .download-links {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background: #f8f9fa;
+  }
+
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .link-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .link-item span {
+    min-width: 100px;
+    font-weight: bold;
+  }
+
+  .download-link {
+    color: #007bff;
+    text-decoration: none;
+    flex: 1;
+  }
+
+  .download-link:hover {
+    text-decoration: underline;
+  }
+
+  .preview-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+
+  .preview-section.hidden {
+    display: none;
+  }
+
+  .preview-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .preview-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .preview-label {
+    min-width: 120px;
+    font-weight: bold;
+  }
+
+  .preview-value {
+    flex: 1;
+    padding: 5px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+
+  .button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+
+  .primary-btn {
+    background: #007bff;
+    color: white;
+  }
+
+  .primary-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .secondary-btn {
+    background: #6c757d;
+    color: white;
+  }
+
+  .primary-btn:hover:not(:disabled) {
+    background: #0056b3;
+  }
+
+  .secondary-btn:hover {
+    background: #545b62;
+  }
+</style>

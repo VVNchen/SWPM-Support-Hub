@@ -1,0 +1,385 @@
+<!-- Meeting minutes 模組 HTML -->
+<div class="meeting-container">
+  <h2>📝 Meeting Minutes</h2>
+
+  <!-- 會議搜尋區塊 -->
+  <div class="form-section">
+    <label for="meetingSearch">搜尋會議:</label>
+    <div class="search-group">
+      <input type="text" id="meetingSearch" class="form-input" placeholder="輸入關鍵字搜尋會議記錄...">
+      <button class="search-btn" onclick="searchMeetings()">🔍 搜尋</button>
+    </div>
+  </div>
+
+  <!-- 日期篩選區塊 -->
+  <div class="form-section">
+    <div class="date-filter">
+      <div class="date-item">
+        <label for="startDate">開始日期:</label>
+        <input type="date" id="startDate" class="form-input">
+      </div>
+      <div class="date-item">
+        <label for="endDate">結束日期:</label>
+        <input type="date" id="endDate" class="form-input">
+      </div>
+      <button class="filter-btn" onclick="filterByDate()">📅 篩選</button>
+    </div>
+  </div>
+
+  <!-- 會議類型篩選 -->
+  <div class="form-section">
+    <label for="meetingType">會議類型:</label>
+    <select id="meetingType" class="form-input">
+      <option value="">全部會議</option>
+      <option value="weekly">週會</option>
+      <option value="project">專案會議</option>
+      <option value="review">評審會議</option>
+      <option value="planning">規劃會議</option>
+      <option value="other">其他</option>
+    </select>
+  </div>
+
+  <!-- 會議清單區塊 -->
+  <div class="meeting-list-section">
+    <h3>📋 會議記錄清單</h3>
+    <div id="meetingList" class="meeting-list">
+      <div class="loading-placeholder">
+        🔄 Loading meeting records...
+      </div>
+    </div>
+  </div>
+
+  <!-- 會議詳情區塊 -->
+  <div id="meetingDetails" class="meeting-details hidden">
+    <h3>📄 會議詳情</h3>
+    <div class="details-content">
+      <div class="detail-item">
+        <span class="detail-label">會議主題:</span>
+        <span id="meetingTitle" class="detail-value">-</span>
+        <button class="copy-btn small" onclick="copyDetailText('meetingTitle')" title="Copy">📋</button>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">會議日期:</span>
+        <span id="meetingDate" class="detail-value">-</span>
+        <button class="copy-btn small" onclick="copyDetailText('meetingDate')" title="Copy">📋</button>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">會議類型:</span>
+        <span id="meetingTypeDetail" class="detail-value">-</span>
+        <button class="copy-btn small" onclick="copyDetailText('meetingTypeDetail')" title="Copy">📋</button>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">參與人員:</span>
+        <span id="meetingAttendees" class="detail-value">-</span>
+        <button class="copy-btn small" onclick="copyDetailText('meetingAttendees')" title="Copy">📋</button>
+      </div>
+      <div class="detail-item full-width">
+        <span class="detail-label">會議內容:</span>
+        <div id="meetingContent" class="detail-content">-</div>
+        <button class="copy-btn small" onclick="copyDetailText('meetingContent')" title="Copy">📋</button>
+      </div>
+      <div class="detail-item full-width">
+        <span class="detail-label">行動項目:</span>
+        <div id="meetingActions" class="detail-content">-</div>
+        <button class="copy-btn small" onclick="copyDetailText('meetingActions')" title="Copy">📋</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 匯出功能區塊 -->
+  <div class="export-section">
+    <h3>📤 匯出功能</h3>
+    <div class="export-buttons">
+      <button class="export-btn" onclick="exportToWord()">📄 匯出為 Word</button>
+      <button class="export-btn" onclick="exportToPdf()">📋 匯出為 PDF</button>
+      <button class="export-btn" onclick="exportToExcel()">📊 匯出為 Excel</button>
+    </div>
+  </div>
+
+  <!-- 統計資訊區塊 -->
+  <div class="stats-section">
+    <h3>📊 統計資訊</h3>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-label">總會議數:</span>
+        <span id="totalMeetings" class="stat-value">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">本月會議:</span>
+        <span id="monthlyMeetings" class="stat-value">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">待處理行動項目:</span>
+        <span id="pendingActions" class="stat-value">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">最近更新:</span>
+        <span id="lastUpdate" class="stat-value">-</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .meeting-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .form-section {
+    margin-bottom: 20px;
+  }
+
+  .form-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .search-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  .search-group .form-input {
+    flex: 1;
+  }
+
+  .search-btn,
+  .filter-btn,
+  .export-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+
+  .search-btn {
+    background: #007bff;
+    color: white;
+  }
+
+  .filter-btn {
+    background: #28a745;
+    color: white;
+  }
+
+  .export-btn {
+    background: #17a2b8;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .search-btn:hover {
+    background: #0056b3;
+  }
+
+  .filter-btn:hover {
+    background: #218838;
+  }
+
+  .export-btn:hover {
+    background: #138496;
+  }
+
+  .date-filter {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+  }
+
+  .date-item {
+    flex: 1;
+  }
+
+  .date-item label {
+    margin-bottom: 5px;
+  }
+
+  .meeting-list-section {
+    margin: 30px 0;
+  }
+
+  .meeting-list {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .meeting-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .meeting-item:hover {
+    background-color: #f8f9fa;
+  }
+
+  .meeting-item.selected {
+    background-color: #e3f2fd;
+  }
+
+  .meeting-item:last-child {
+    border-bottom: none;
+  }
+
+  .meeting-item-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .meeting-item-meta {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    gap: 15px;
+  }
+
+  .loading-placeholder {
+    padding: 40px;
+    text-align: center;
+    color: #666;
+  }
+
+  .meeting-details {
+    margin: 30px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    background: #f8f9fa;
+  }
+
+  .meeting-details.hidden {
+    display: none;
+  }
+
+  .details-content {
+    display: grid;
+    gap: 15px;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .detail-item.full-width {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .detail-label {
+    min-width: 120px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .detail-value {
+    flex: 1;
+    padding: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+
+  .detail-content {
+    flex: 1;
+    padding: 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    min-height: 80px;
+    white-space: pre-wrap;
+  }
+
+  .copy-btn {
+    padding: 5px 8px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10px;
+    background: #17a2b8;
+    color: white;
+    transition: background-color 0.3s;
+  }
+
+  .copy-btn:hover {
+    background: #138496;
+  }
+
+  .export-section,
+  .stats-section {
+    margin: 30px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+
+  .export-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .stat-label {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .stat-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+  }
+
+  @media (max-width: 768px) {
+    .date-filter {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .export-buttons {
+      flex-direction: column;
+    }
+
+    .export-btn {
+      margin-right: 0;
+    }
+  }
+</style>

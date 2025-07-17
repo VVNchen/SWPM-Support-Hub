@@ -1,0 +1,521 @@
+<!-- Create WF & Email 模組 HTML -->
+<div class="workflow-container">
+  <h2>📧 Create Workflow & Email</h2>
+
+  <!-- 工作流程類型選擇 -->
+  <div class="form-section">
+    <label for="workflowType">工作流程類型:</label>
+    <select id="workflowType" class="form-input">
+      <option value="">請選擇工作流程類型...</option>
+      <option value="test-request">測試請求</option>
+      <option value="build-request">編譯請求</option>
+      <option value="release-request">發佈請求</option>
+      <option value="bug-report">錯誤回報</option>
+      <option value="feature-request">功能請求</option>
+      <option value="document-request">文件請求</option>
+    </select>
+  </div>
+
+  <!-- 產品資訊區塊 -->
+  <div class="form-section">
+    <label for="wfProductSelect">選擇產品:</label>
+    <select id="wfProductSelect" class="form-input">
+      <option value="">🔄 Loading product data...</option>
+    </select>
+  </div>
+
+  <!-- 工作流程詳情 -->
+  <div class="form-section">
+    <label for="workflowTitle">工作流程標題:</label>
+    <input type="text" id="workflowTitle" class="form-input" placeholder="請輸入工作流程標題...">
+  </div>
+
+  <div class="form-section">
+    <label for="workflowDescription">工作流程描述:</label>
+    <textarea id="workflowDescription" class="form-textarea" rows="6" placeholder="詳細描述工作流程的內容、目標和要求..."></textarea>
+  </div>
+
+  <!-- 優先級和截止日期 -->
+  <div class="form-row">
+    <div class="form-section">
+      <label for="workflowPriority">優先級:</label>
+      <select id="workflowPriority" class="form-input">
+        <option value="low">🟢 低</option>
+        <option value="normal" selected>🟡 一般</option>
+        <option value="high">🟠 高</option>
+        <option value="urgent">🔴 緊急</option>
+      </select>
+    </div>
+
+    <div class="form-section">
+      <label for="workflowDeadline">截止日期:</label>
+      <input type="date" id="workflowDeadline" class="form-input">
+    </div>
+  </div>
+
+  <!-- 指派人員 -->
+  <div class="form-section">
+    <label for="assigneeSelect">指派給:</label>
+    <select id="assigneeSelect" class="form-input">
+      <option value="">請選擇指派人員...</option>
+      <option value="zhang.san@asus.com">張三 (張三@asus.com)</option>
+      <option value="li.si@asus.com">李四 (李四@asus.com)</option>
+      <option value="wang.wu@asus.com">王五 (王五@asus.com)</option>
+      <option value="zhao.liu@asus.com">趙六 (趙六@asus.com)</option>
+      <option value="chen.qi@asus.com">陳七 (陳七@asus.com)</option>
+    </select>
+  </div>
+
+  <!-- 副本收件人 -->
+  <div class="form-section">
+    <label for="ccEmails">副本收件人 (CC):</label>
+    <div class="cc-input-group">
+      <input type="email" id="ccEmailInput" class="form-input" placeholder="輸入 Email 地址...">
+      <button class="add-btn" onclick="addCcEmail()">➕ 新增</button>
+    </div>
+    <div id="ccEmailList" class="email-tags"></div>
+  </div>
+
+  <!-- 附件上傳 -->
+  <div class="form-section">
+    <label for="workflowAttachments">附件:</label>
+    <div class="attachment-area">
+      <input type="file" id="workflowAttachments" class="form-input" multiple>
+      <div class="attachment-hint">支援多個檔案，最大 10MB/檔案</div>
+      <div id="attachmentList" class="attachment-list"></div>
+    </div>
+  </div>
+
+  <!-- 預覽區塊 -->
+  <div id="workflowPreview" class="preview-section hidden">
+    <h3>📋 工作流程預覽</h3>
+    <div class="preview-content">
+      <div class="preview-item">
+        <span class="preview-label">類型:</span>
+        <span id="previewType" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('previewType')" title="Copy">📋</button>
+      </div>
+      <div class="preview-item">
+        <span class="preview-label">產品:</span>
+        <span id="previewProduct" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('previewProduct')" title="Copy">📋</button>
+      </div>
+      <div class="preview-item">
+        <span class="preview-label">標題:</span>
+        <span id="previewTitle" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('previewTitle')" title="Copy">📋</button>
+      </div>
+      <div class="preview-item">
+        <span class="preview-label">優先級:</span>
+        <span id="previewPriority" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('previewPriority')" title="Copy">📋</button>
+      </div>
+      <div class="preview-item">
+        <span class="preview-label">指派給:</span>
+        <span id="previewAssignee" class="preview-value">-</span>
+        <button class="copy-btn small" onclick="copyPreviewText('previewAssignee')" title="Copy">📋</button>
+      </div>
+      <div class="preview-item full-width">
+        <span class="preview-label">描述:</span>
+        <div id="previewDescription" class="preview-description">-</div>
+        <button class="copy-btn small" onclick="copyPreviewText('previewDescription')" title="Copy">📋</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email 預覽 -->
+  <div id="emailPreview" class="email-preview-section hidden">
+    <h3>📨 Email 預覽</h3>
+    <div class="email-content">
+      <div class="email-field">
+        <span class="email-label">To:</span>
+        <span id="emailTo" class="email-value">-</span>
+      </div>
+      <div class="email-field">
+        <span class="email-label">CC:</span>
+        <span id="emailCc" class="email-value">-</span>
+      </div>
+      <div class="email-field">
+        <span class="email-label">Subject:</span>
+        <span id="emailSubject" class="email-value">-</span>
+      </div>
+      <div class="email-body">
+        <div class="email-label">Body:</div>
+        <div id="emailBody" class="email-body-content">-</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 動作按鈕 -->
+  <div class="button-group">
+    <button id="createWorkflowBtn" class="primary-btn" onclick="createWorkflow()" disabled>
+      🚀 建立工作流程
+    </button>
+    <button id="sendEmailBtn" class="secondary-btn" onclick="sendEmail()" disabled>
+      📧 發送 Email
+    </button>
+    <button class="secondary-btn" onclick="resetWorkflowForm()">
+      🔄 重設表單
+    </button>
+  </div>
+
+  <!-- 工作流程歷史 -->
+  <div class="history-section">
+    <h3>📊 最近的工作流程</h3>
+    <div id="workflowHistory" class="workflow-history">
+      <div class="loading-placeholder">🔄 Loading workflow history...</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .workflow-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .form-section {
+    margin-bottom: 20px;
+  }
+
+  .form-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .cc-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .cc-input-group .form-input {
+    flex: 1;
+  }
+
+  .add-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #28a745;
+    color: white;
+    font-size: 14px;
+  }
+
+  .add-btn:hover {
+    background: #218838;
+  }
+
+  .email-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .email-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+
+  .email-tag .remove-btn {
+    background: none;
+    border: none;
+    color: #f44336;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .attachment-area {
+    border: 2px dashed #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    background: #fafafa;
+  }
+
+  .attachment-hint {
+    font-size: 12px;
+    color: #666;
+    margin-top: 8px;
+  }
+
+  .attachment-list {
+    margin-top: 15px;
+    text-align: left;
+  }
+
+  .attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .attachment-name {
+    flex: 1;
+    font-size: 14px;
+  }
+
+  .attachment-size {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .remove-attachment {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .preview-section,
+  .email-preview-section {
+    margin: 30px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+
+  .preview-section.hidden,
+  .email-preview-section.hidden {
+    display: none;
+  }
+
+  .preview-content {
+    display: grid;
+    gap: 15px;
+  }
+
+  .preview-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .preview-item.full-width {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .preview-label {
+    min-width: 100px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .preview-value {
+    flex: 1;
+    padding: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+
+  .preview-description {
+    flex: 1;
+    padding: 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    white-space: pre-wrap;
+    min-height: 80px;
+  }
+
+  .email-content {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+  }
+
+  .email-field {
+    display: flex;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+
+  .email-label {
+    min-width: 60px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .email-value {
+    flex: 1;
+  }
+
+  .email-body {
+    margin-top: 15px;
+  }
+
+  .email-body-content {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 12px;
+    white-space: pre-wrap;
+    min-height: 120px;
+    margin-top: 8px;
+  }
+
+  .copy-btn {
+    padding: 5px 8px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10px;
+    background: #17a2b8;
+    color: white;
+  }
+
+  .copy-btn:hover {
+    background: #138496;
+  }
+
+  .button-group {
+    margin: 30px 0;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+
+  .primary-btn {
+    background: #007bff;
+    color: white;
+  }
+
+  .primary-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .secondary-btn {
+    background: #6c757d;
+    color: white;
+  }
+
+  .primary-btn:hover:not(:disabled) {
+    background: #0056b3;
+  }
+
+  .secondary-btn:hover {
+    background: #545b62;
+  }
+
+  .history-section {
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+
+  .workflow-history {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .workflow-item {
+    padding: 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  .workflow-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .workflow-item-title {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .workflow-item-date {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .workflow-item-meta {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    gap: 15px;
+  }
+
+  .loading-placeholder {
+    padding: 40px;
+    text-align: center;
+    color: #666;
+  }
+
+  @media (max-width: 768px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .button-group {
+      flex-direction: column;
+    }
+
+    .cc-input-group {
+      flex-direction: column;
+    }
+  }
+</style>

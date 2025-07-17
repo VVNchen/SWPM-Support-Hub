@@ -76,8 +76,8 @@ createApp({
           content: '<div style="padding: 20px;"><h2>Download FW & SHA256</h2><p>功能開發中...</p></div>'
         },
         {
-          name: '檢視會議記錄',
-          content: '<div style="padding: 20px;"><h2>檢視會議記錄</h2><p>功能開發中...</p></div>'
+          name: 'Meeting minutes',
+          content: '<div style="padding: 20px;"><h2>Meeting minutes</h2><p>功能開發中...</p></div>'
         },
         {
           name: 'Create WF & Email',
@@ -174,139 +174,105 @@ createApp({
       }
     },
 
-    // 載入 PLM 模組
+    // 載入 FW & SHA256 模組
     async loadPLMModule() {
-      console.log('📥 載入 PLM 模組...');
+      console.log('📥 載入 FW & SHA256 模組...');
 
       try {
         // 載入 HTML 模板
-        const htmlResponse = await fetch('pages/firmware/plm.html');
+        const htmlResponse = await fetch('pages/firmware/fw-sha256.html');
         const htmlContent = await htmlResponse.text();
 
         // 更新 tab 內容
-        const plmTab = this.firmwareTabs.find(tab => tab.name === 'FW & SHA256');
-        if (plmTab) {
-          plmTab.content = htmlContent;
+        const fwTab = this.firmwareTabs.find(tab => tab.name === 'FW & SHA256');
+        if (fwTab) {
+          fwTab.content = htmlContent;
         }
 
         // 等待 DOM 更新後載入 JS 功能
         this.$nextTick(async () => {
-          await this.loadScript('function_js/plm-functions.js');
+          await this.loadScript('function_js/fw-sha256-functions.js');
 
-          // 初始化 PLM 功能
-          if (window.plmFunctions) {
+          // 初始化 FW & SHA256 功能
+          if (window.fwSha256Functions) {
             setTimeout(() => {
-              window.plmFunctions.initialize();
+              window.fwSha256Functions.initialize();
             }, 100);
           }
         });
 
-        console.log('✅ PLM 模組載入成功');
+        console.log('✅ FW & SHA256 模組載入成功');
       } catch (error) {
-        console.error('❌ PLM 模組載入失敗:', error);
-        this.showModuleError('plm', error.message);
+        console.error('❌ FW & SHA256 模組載入失敗:', error);
+        this.showModuleError('fw-sha256', error.message);
       }
     },
 
-    // 載入 Email 模組
+    // 載入 Meeting Minutes 模組
     async loadEmailModule() {
-      console.log('📥 載入 Email 模組...');
+      console.log('📥 載入 Meeting Minutes 模組...');
 
       try {
         // 載入 HTML 模板
-        const htmlResponse = await fetch('pages/firmware/email.html');
+        const htmlResponse = await fetch('pages/firmware/meeting-minutes.html');
         const htmlContent = await htmlResponse.text();
 
         // 更新 tab 內容
-        const emailTab = this.firmwareTabs.find(tab => tab.name === '檢視會議記錄');
-        if (emailTab) {
-          emailTab.content = htmlContent;
+        const meetingTab = this.firmwareTabs.find(tab => tab.name === 'Meeting minutes');
+        if (meetingTab) {
+          meetingTab.content = htmlContent;
         }
 
         // 等待 DOM 更新後載入 JS 功能
         this.$nextTick(async () => {
-          await this.loadScript('function_js/email-functions.js');
+          await this.loadScript('function_js/meeting-minutes-functions.js');
 
-          // 初始化 Email 功能
-          if (window.emailFunctions) {
+          // 初始化 Meeting Minutes 功能
+          if (window.meetingMinutesFunction) {
             setTimeout(() => {
-              window.emailFunctions.initialize();
+              window.meetingMinutesFunction.initialize();
             }, 100);
           }
         });
 
-        console.log('✅ Email 模組載入成功');
+        console.log('✅ Meeting Minutes 模組載入成功');
       } catch (error) {
-        console.error('❌ Email 模組載入失敗:', error);
-        this.showModuleError('email', error.message);
+        console.error('❌ Meeting Minutes 模組載入失敗:', error);
+        this.showModuleError('meeting-minutes', error.message);
       }
     },
 
-    // 載入 Sync 模組
+    // 載入 Create WF & Email 模組
     async loadSyncModule() {
-      console.log('📥 載入 Sync 模組...');
+      console.log('📥 載入 Create WF & Email 模組...');
 
       try {
         // 載入 HTML 模板
-        const htmlResponse = await fetch('pages/firmware/sync.html');
+        const htmlResponse = await fetch('pages/firmware/create-wf-email.html');
         const htmlContent = await htmlResponse.text();
 
         // 更新 tab 內容
-        const syncTab = this.firmwareTabs.find(tab => tab.name === 'Create WF & Email');
-        if (syncTab) {
-          syncTab.content = htmlContent;
+        const createWfTab = this.firmwareTabs.find(tab => tab.name === 'Create WF & Email');
+        if (createWfTab) {
+          createWfTab.content = htmlContent;
         }
 
         // 等待 DOM 更新後載入 JS 功能
         this.$nextTick(async () => {
-          await this.loadScript('function_js/sync-functions.js');
+          await this.loadScript('function_js/create-wf-email-functions.js');
 
-          // 初始化 Sync 功能
-          if (window.syncFunctions) {
+          // 初始化 Create WF & Email 功能
+          if (window.createWfEmailFunctions) {
             setTimeout(() => {
-              window.syncFunctions.initialize();
+              window.createWfEmailFunctions.initialize();
             }, 100);
           }
         });
 
-        console.log('✅ Sync 模組載入成功');
+        console.log('✅ Create WF & Email 模組載入成功');
       } catch (error) {
-        console.error('❌ Sync 模組載入失敗:', error);
-        this.showModuleError('sync', error.message);
-      }
-    },
-
-    // 載入 Report 模組
-    async loadReportModule() {
-      console.log('📥 載入 Report 模組...');
-
-      try {
-        // 載入 HTML 模板
-        const htmlResponse = await fetch('pages/firmware/report.html');
-        const htmlContent = await htmlResponse.text();
-
-        // 更新 tab 內容
-        const reportTab = this.firmwareTabs.find(tab => tab.name === 'report');
-        if (reportTab) {
-          reportTab.content = htmlContent;
-        }
-
-        // 等待 DOM 更新後載入 JS 功能
-        this.$nextTick(async () => {
-          await this.loadScript('function_js/report-functions.js');
-
-          // 初始化 Report 功能
-          if (window.reportFunctions) {
-            setTimeout(() => {
-              window.reportFunctions.initialize();
-            }, 100);
-          }
-        });
-
-        console.log('✅ Report 模組載入成功');
-      } catch (error) {
-        console.error('❌ Report 模組載入失敗:', error);
-        this.showModuleError('report', error.message);
+        console.error('❌ Create WF & Email 模組載入失敗:', error);
+        this.showModuleError('create-wf-email', error.message);
       }
     },
 
