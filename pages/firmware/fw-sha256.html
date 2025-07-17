@@ -10,10 +10,17 @@
 
   <div class="form-section">
     <label for="fwPath">Firmware Path:</label>
-    <div class="input-group-vertical">
-      <input type="text" id="fwPath" class="form-input" placeholder="" readonly>
-      <button id="fwEditBtn" class="btn btn-secondary" onclick="toggleFwEditMode()" title="Toggle edit mode">✏️
-        Edit</button>
+    <div class="firmware-section">
+      <div class="firmware-container">
+        <div class="firmware-path-input">
+          <input type="text" id="fwPath" class="form-input" placeholder="" readonly>
+        </div>
+        <div class="firmware-buttons-row" style="margin-top: 8px;">
+          <button id="fwEditBtn" class="btn btn-secondary" onclick="toggleFwEditMode()" title="Toggle edit mode">
+            ✏️ Edit
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
