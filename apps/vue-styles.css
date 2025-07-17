@@ -758,3 +758,21 @@
     transform: translateY(-15px) scale(0.9);
   }
 }
+
+/* Input group vertical layout for button on new line */
+.input-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group-vertical .form-input {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.input-group-vertical .btn {
+  align-self: flex-start;
+  width: auto;
+  min-width: 80px;
+}
