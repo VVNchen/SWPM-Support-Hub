@@ -1,4 +1,3 @@
-// FW & SHA256 模組專用功能
 class FwSha256Functions {
   constructor() {
     this.selectedProduct = null;
@@ -35,7 +34,6 @@ class FwSha256Functions {
     }
   }
 
-  // 等待元素載入
   waitForElement(selector, timeout = 5000) {
     return new Promise((resolve, reject) => {
       const element = document.querySelector(selector);
@@ -64,7 +62,6 @@ class FwSha256Functions {
     });
   }
 
-  // 載入產品資料
   async loadProductData() {
     const productSelect = document.getElementById('fwProductSelect');
     if (!productSelect) return;
@@ -72,7 +69,6 @@ class FwSha256Functions {
     productSelect.innerHTML = '<option value="">🔄 Loading product data...</option>';
 
     try {
-      // 嘗試從 Excel 載入
       const response = await fetch('datasheet/Router_List.xlsx');
       if (!response.ok) {
         throw new Error(`Excel 檔案載入失敗: HTTP ${response.status}`);
@@ -101,7 +97,6 @@ class FwSha256Functions {
     }
   }
 
-  // 填充產品選單
   populateProductSelect(products) {
     const productSelect = document.getElementById('fwProductSelect');
     if (!productSelect) return;
@@ -121,7 +116,6 @@ class FwSha256Functions {
     console.log(`✅ 載入了 ${products.length} 個產品到選單中`);
   }
 
-  // 顯示載入錯誤
   showLoadingError() {
     const productSelect = document.getElementById('fwProductSelect');
     if (productSelect) {
@@ -129,7 +123,6 @@ class FwSha256Functions {
     }
   }
 
-  // 綁定事件
   bindEvents() {
     const productSelect = document.getElementById('fwProductSelect');
     const fwPath = document.getElementById('fwPath');
@@ -184,6 +177,9 @@ class FwSha256Functions {
       sha256Path.value = '';
       fwPath.placeholder = `No FW_Path found for ${selectedValue}`;
     }
+
+    // 更新下載連結狀態
+    this.updateDownloadLinksState();
   }
 
   // 建立智能固件路徑
@@ -242,8 +238,18 @@ class FwSha256Functions {
 
     const firmwarePath = fwPath.value;
     if (firmwarePath) {
-      // 生成 SHA256 檔案路徑（同目錄下的 .sha256 檔案）
-      const sha256FilePath = firmwarePath + '.sha256';
+      // 找到最後一個點的位置，將副檔名替換成 .sha256
+      const lastDotIndex = firmwarePath.lastIndexOf('.');
+      let sha256FilePath;
+
+      if (lastDotIndex !== -1) {
+        // 如果找到副檔名，替換成 .sha256
+        sha256FilePath = firmwarePath.substring(0, lastDotIndex) + '.sha256';
+      } else {
+        // 如果沒有副檔名，直接加上 .sha256
+        sha256FilePath = firmwarePath + '.sha256';
+      }
+
       sha256Path.value = sha256FilePath;
     } else {
       sha256Path.value = '';
@@ -278,26 +284,62 @@ class FwSha256Functions {
     }
   }
 
+  // 更新下載連結狀態
+  updateDownloadLinksState() {
+    const fwPath = document.getElementById('fwPath');
+    const fwDownloadLink = document.getElementById('fwDownloadLink');
+    const sha256DownloadLink = document.getElementById('sha256DownloadLink');
+
+    console.log('🔗 更新下載連結狀態...');
+
+    if (!fwPath || !fwDownloadLink || !sha256DownloadLink) {
+      console.log('❌ 找不到必要的元素');
+      return;
+    }
+
+    const hasFwPath = fwPath.value.trim() !== '';
+    console.log('📁 FW路徑狀態:', hasFwPath ? '有值' : '無值', fwPath.value);
+
+    if (hasFwPath) {
+      // 啟用下載連結
+      fwDownloadLink.classList.remove('disabled');
+      sha256DownloadLink.classList.remove('disabled');
+      console.log('✅ 下載連結已啟用');
+    } else {
+      // 禁用下載連結
+      fwDownloadLink.classList.add('disabled');
+      sha256DownloadLink.classList.add('disabled');
+      console.log('❌ 下載連結已禁用');
+    }
+  }
+
   // 更新生成按鈕狀態
   updateGenerateButton() {
     const generateBtn = document.getElementById('fwGenerateBtn');
     const productSelect = document.getElementById('fwProductSelect');
     const fwPath = document.getElementById('fwPath');
 
+    console.log('🔄 更新生成按鈕狀態...');
+
     if (!generateBtn) return;
 
     const hasProduct = productSelect?.value?.trim() !== '';
     const hasFwPath = fwPath?.value?.trim() !== '';
 
+    console.log('產品選擇:', hasProduct, '路徑填入:', hasFwPath);
+
     if (hasProduct && hasFwPath) {
       generateBtn.disabled = false;
       generateBtn.style.backgroundColor = '#007bff';
-      generateBtn.title = '生成下載連結';
+      generateBtn.title = 'Generate download links';
     } else {
       generateBtn.disabled = true;
       generateBtn.style.backgroundColor = '#6c757d';
       generateBtn.title = '請選擇產品並確認固件路徑';
     }
+
+    // 更新下載連結狀態
+    this.updateDownloadLinksState();
   }
 
   // 生成下載連結
@@ -325,18 +367,140 @@ class FwSha256Functions {
     const sha256DownloadUrl = this.convertPathToDownloadUrl(sha256FilePath);
 
     if (fwDownloadLink) {
-      fwDownloadLink.href = fwDownloadUrl;
-      fwDownloadLink.textContent = '點擊下載固件';
-      fwDownloadLink.style.color = '#007bff';
+      fwDownloadLink.textContent = 'Click to download FW';
+      fwDownloadLink.classList.remove('disabled');
     }
 
     if (sha256DownloadLink) {
-      sha256DownloadLink.href = sha256DownloadUrl;
-      sha256DownloadLink.textContent = '點擊下載SHA256';
-      sha256DownloadLink.style.color = '#007bff';
+      sha256DownloadLink.textContent = 'Click to download SHA256';
+      sha256DownloadLink.classList.remove('disabled');
     }
 
-    this.showSuccess('下載連結已生成！');
+    this.showSuccess('Download links generated successfully!');
+  }
+
+  // 下載固件檔案
+  async downloadFirmware() {
+    const fwPath = document.getElementById('fwPath');
+
+    if (!fwPath || !fwPath.value.trim()) {
+      this.showError('請先選擇產品並確認固件路徑');
+      return;
+    }
+
+    const firmwarePath = fwPath.value.trim();
+    const fileName = this.getFileNameFromPath(firmwarePath);
+
+    try {
+      // 使用 File System Access API (如果支援的話)
+      if ('showSaveFilePicker' in window) {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: fileName,
+          types: [{
+            description: 'Firmware files',
+            accept: { 'application/octet-stream': ['.pkgtb', '.bin', '.fw'] }
+          }]
+        });
+
+        this.showSuccess(`準備下載固件檔案到: ${fileHandle.name}`);
+        // 這裡需要實際的檔案讀取和寫入邏輯
+        this.performFileDownload(firmwarePath, fileHandle);
+      } else {
+        // 降級方案：創建下載連結
+        this.createDownloadLink(firmwarePath, fileName);
+      }
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.log('用戶取消了下載');
+      } else {
+        console.error('下載失敗:', error);
+        this.showError('下載失敗: ' + error.message);
+      }
+    }
+  }
+
+  // 下載 SHA256 檔案
+  async downloadSha256() {
+    const sha256Path = document.getElementById('sha256Path');
+
+    if (!sha256Path || !sha256Path.value.trim()) {
+      this.showError('請先選擇產品並確認固件路徑');
+      return;
+    }
+
+    const sha256FilePath = sha256Path.value.trim();
+    const fileName = this.getFileNameFromPath(sha256FilePath);
+
+    try {
+      // 使用 File System Access API (如果支援的話)
+      if ('showSaveFilePicker' in window) {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: fileName,
+          types: [{
+            description: 'SHA256 files',
+            accept: { 'text/plain': ['.sha256'] }
+          }]
+        });
+
+        this.showSuccess(`準備下載 SHA256 檔案到: ${fileHandle.name}`);
+        // 這裡需要實際的檔案讀取和寫入邏輯
+        this.performFileDownload(sha256FilePath, fileHandle);
+      } else {
+        // 降級方案：創建下載連結
+        this.createDownloadLink(sha256FilePath, fileName);
+      }
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.log('用戶取消了下載');
+      } else {
+        console.error('下載失敗:', error);
+        this.showError('下載失敗: ' + error.message);
+      }
+    }
+  }
+
+  // 從路徑中提取檔案名稱
+  getFileNameFromPath(filePath) {
+    const parts = filePath.split(/[\\\/]/);
+    return parts[parts.length - 1];
+  }
+
+  // 執行檔案下載
+  async performFileDownload(sourcePath, fileHandle) {
+    try {
+      // 這裡需要實際的檔案讀取邏輯
+      // 由於瀏覽器無法直接存取本地檔案系統，這需要透過後端服務
+      this.showError('需要後端服務支援才能執行實際的檔案下載');
+
+      // 暫時的模擬實現
+      const writable = await fileHandle.createWritable();
+      const content = `模擬檔案內容 - 路徑: ${sourcePath}\n下載時間: ${new Date().toISOString()}`;
+      await writable.write(content);
+      await writable.close();
+
+      this.showSuccess('檔案下載完成！');
+    } catch (error) {
+      console.error('檔案寫入失敗:', error);
+      this.showError('檔案寫入失敗: ' + error.message);
+    }
+  }
+
+  // 創建下載連結 (降級方案)
+  createDownloadLink(filePath, fileName) {
+    // 對於不支援 File System Access API 的瀏覽器
+    const content = `檔案路徑: ${filePath}\n這是一個模擬的下載檔案\n下載時間: ${new Date().toISOString()}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    this.showSuccess('檔案下載已開始（模擬）');
   }
 
   // 轉換檔案路徑為下載 URL
@@ -368,14 +532,12 @@ class FwSha256Functions {
     if (previewSection) previewSection.classList.add('hidden');
 
     if (fwDownloadLink) {
-      fwDownloadLink.href = '#';
-      fwDownloadLink.textContent = '點擊下載固件';
-      fwDownloadLink.style.color = '#6c757d';
+      fwDownloadLink.textContent = 'Click to download FW';
+      fwDownloadLink.classList.add('disabled');
     }
     if (sha256DownloadLink) {
-      sha256DownloadLink.href = '#';
-      sha256DownloadLink.textContent = '點擊下載SHA256';
-      sha256DownloadLink.style.color = '#6c757d';
+      sha256DownloadLink.textContent = 'Click to download SHA256';
+      sha256DownloadLink.classList.add('disabled');
     }
 
     this.updateGenerateButton();
@@ -402,6 +564,7 @@ class FwSha256Functions {
       editBtn.classList.remove('confirmed');
       this.updateSha256Path();
       this.updatePreview();
+      this.updateDownloadLinksState();
     }
   }
 
@@ -432,12 +595,12 @@ class FwSha256Functions {
       document.getElementById('sha256DownloadLink');
 
     if (!linkElement || linkElement.href === '#') {
-      this.showError('請先生成下載連結');
+      this.showError('Please generate download links first');
       return;
     }
 
     navigator.clipboard.writeText(linkElement.href).then(() => {
-      this.showSuccess('下載連結已複製到剪貼簿');
+      this.showSuccess('Download link copied to clipboard');
     }).catch(() => {
       this.showError('複製失敗');
     });
@@ -470,5 +633,7 @@ window.generateDownloadLinks = () => window.fwSha256Functions.generateDownloadLi
 window.resetFwForm = () => window.fwSha256Functions.resetForm();
 window.copyDownloadLink = (type) => window.fwSha256Functions.copyDownloadLink(type);
 window.copyPreviewText = (elementId) => window.fwSha256Functions.copyPreviewText(elementId);
+window.downloadFirmware = () => window.fwSha256Functions.downloadFirmware();
+window.downloadSha256 = () => window.fwSha256Functions.downloadSha256();
 
 console.log('✅ FW & SHA256 功能模組已載入');

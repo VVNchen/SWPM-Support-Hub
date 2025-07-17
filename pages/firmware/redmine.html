@@ -4,7 +4,6 @@
   <!-- 1. Choose your product -->
   <div class="form-section">
     <label class="form-label">
-      <span class="label-icon">📱</span>
       <span class="label-text">Choose your product</span>
       <span class="required">*</span>
     </label>
@@ -12,7 +11,6 @@
     <select id="productSelect" class="form-select product-select-scrollable"
       onchange="updateFirmwarePath(); updateCreateButton();">
       <option value="">Please select a product...</option>
-      <!-- 產品選項將從 redmine-functions.js 動態載入 -->
     </select> <input type="file" id="excelFileInput" accept=".xlsx,.xls" style="display: none;"
       onchange="handleExcelUpload(event)">
 
@@ -22,7 +20,6 @@
   <!-- 2. Firmware -->
   <div class="form-section">
     <label class="form-label">
-      <span class="label-icon">💾</span>
       <span class="label-text">Firmware</span>
       <span class="required">*</span>
     </label>
@@ -47,7 +44,6 @@
   <!-- 3. Select Redmine Tag -->
   <div class="form-section">
     <label class="form-label">
-      <span class="label-icon">🏷️</span>
       <span class="label-text">Select Redmine Tag</span>
       <span class="required">*</span>
     </label>
