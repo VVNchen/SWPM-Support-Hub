@@ -422,6 +422,13 @@ class RedmineFunctions {
       redmineProject = selectedOption.dataset.redmineProject || '';
     }
 
+    // 取得標籤的顯示文字
+    let selectedTagText = '';
+    if (selectedTag && redmineTagSelect) {
+      const selectedTagOption = redmineTagSelect.options[redmineTagSelect.selectedIndex];
+      selectedTagText = selectedTagOption.textContent || selectedTag;
+    }
+
     // 更新預覽內容
     const previewRedmineProject = document.getElementById('previewRedmineProject');
     const previewFirmware = document.getElementById('previewFirmware');
@@ -430,7 +437,7 @@ class RedmineFunctions {
 
     if (previewRedmineProject) previewRedmineProject.textContent = redmineProject || '-';
     if (previewFirmware) previewFirmware.textContent = firmwareValue ? `Firmware: ${firmwareValue}` : 'Firmware: -';
-    if (previewTag) previewTag.textContent = selectedTag || '-';
+    if (previewTag) previewTag.textContent = selectedTagText || '-';
 
     // 生成並顯示主旨
     if (previewSubject) {
