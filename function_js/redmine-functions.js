@@ -51,7 +51,7 @@ class RedmineFunctions {
           <p><strong>解決方案:</strong></p>
           <ul>
             <li>檢查網路連線</li>
-            <li>確認 DUT_List.xlsx 檔案存在</li>
+            <li>確認 datasheet/DUT_List.xlsx 檔案存在</li>
             <li>重新載入頁面</li>
           </ul>
         </div>
@@ -146,7 +146,7 @@ class RedmineFunctions {
     console.log('✅ SheetJS 庫已準備好');
 
     try {
-      const response = await fetch('DUT_List.xlsx');
+      const response = await fetch('datasheet/DUT_List.xlsx');
       if (!response.ok) {
         throw new Error(`Excel 檔案載入失敗: HTTP ${response.status}`);
       }
@@ -234,7 +234,7 @@ class RedmineFunctions {
     if (productSelect) {
       productSelect.innerHTML = `
         <option value="">❌ Loading failed</option>
-        <option value="" disabled>Please check DUT_List.xlsx or dut-list.json</option>
+        <option value="" disabled>Please check datasheet/DUT_List.xlsx or dut-list.json</option>
       `;
     }
   }
