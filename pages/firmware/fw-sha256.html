@@ -10,7 +10,7 @@
 
   <div class="form-section">
     <label for="fwPath">Firmware Path:</label>
-    <div class="input-group">
+    <div class="input-group-vertical">
       <input type="text" id="fwPath" class="form-input" placeholder="" readonly>
       <button id="fwEditBtn" class="btn btn-secondary" onclick="toggleFwEditMode()" title="Toggle edit mode">✏️
         Edit</button>
@@ -80,6 +80,16 @@
 
   .input-group .form-input {
     flex: 1;
+  }
+
+  .input-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-group-vertical .form-input {
+    width: 100%;
   }
 
   .download-link {
