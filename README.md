@@ -5,7 +5,7 @@
 - **建立表單資料**：自動生成 Redmine 工單內容
 - **產品選擇**：透過 SheetJS 從 Excel(Router_List.xlsx) 動態載入產品清單
 - **智能路徑生成**：根據選擇的Product，對照Excel(Router_List.xlsx)，自動帶入最新版的FW路徑
-- **路徑編輯功能**：點擊 "Edit" 按鈕進入編輯模式，可手動修改固件路徑；完成修改後點擊 "Confirmed" 確認變更，系統會即時同步更新到 "Preview Information" 預覽區域的相關欄位
+- **路徑編輯功能**：點擊 "Edit" 按鈕進入編輯模式，可手動修改韌體路徑；完成修改後點擊 "Confirmed" 確認變更，系統會即時同步更新到 "Preview Information" 預覽區域的相關欄位
 - **標籤分類**：選擇 Redmine 標籤）
 - **預覽功能**：即時預覽工單內容
 - **一鍵複製**：快速複製工單資訊到剪貼簿
@@ -19,55 +19,6 @@
 
 ### 📝 SWPM 筆記本
 - **開發中**：此功能正在開發中，敬請期待
-
-### 🎨 用戶體驗
-- **響應式設計**：適配各種螢幕尺寸
-- **暗色模式**：支援亮色/暗色主題切換
-- **側邊欄導航**：可收縮的側邊欄選單
-- **即時反饋**：操作狀態即時顯示
-
-## 🚀 快速開始
-
-### 環境需求
-- 現代瀏覽器（Chrome 88+、Firefox 87+、Safari 14+）
-- 本地 Web 伺服器（用於開發）
-
-### 安裝方式
-
-1. **複製專案**
-   ```bash
-   git clone https://github.com/VVNchen/vue_test.git
-   cd vue_test
-   ```
-
-2. **啟動本地伺服器**
-   
-   **方式一：使用 Python**
-   ```bash
-   # Python 3
-   python -m http.server 8000
-   
-   # Python 2
-   python -m SimpleHTTPServer 8000
-   ```
-   
-   **方式二：使用 Node.js**
-   ```bash
-   npx http-server -p 8000
-   ```
-   
-   **方式三：使用 PHP**
-   ```bash
-   php -S localhost:8000
-   ```
-
-3. **開啟瀏覽器**
-   ```
-   http://localhost:8000
-   ```
-
-### 批次檔啟動（Windows）
-專案包含 `start-server.bat` 批次檔，雙擊即可啟動本地伺服器。
 
 ## 📁 專案結構
 
@@ -83,9 +34,9 @@ Vue-Box/
 │   └── vue-styles.css        # Vue 元件樣式
 │
 ├── 📂 pages/                  # 頁面模組
-│   ├── firmware/             # 固件相關頁面
+│   ├── firmware/             # 韌體相關頁面
 │   │   ├── redmine.html      # Redmine 工單創建
-│   │   ├── fw-sha256.html    # 固件下載 & SHA256
+│   │   ├── fw-sha256.html    # 韌體下載 & SHA256
 │   │   ├── meeting-minutes.html  # 會議記錄
 │   │   └── create-wf-email.html  # 工作流程郵件
 │   └── swpm/                 # SWPM 筆記
@@ -94,7 +45,7 @@ Vue-Box/
 │
 ├── 📂 function_js/           # JavaScript 功能模組
 │   ├── redmine-functions.js  # Redmine 相關功能
-│   ├── fw-sha256-functions.js # 固件下載功能
+│   ├── fw-sha256-functions.js # 韌體下載功能
 │   ├── meeting-minutes-functions.js # 會議記錄功能
 │   └── create-wf-email-functions.js # 郵件功能
 │
@@ -107,7 +58,7 @@ Vue-Box/
 
 ### Redmine 工單創建
 ```javascript
-// 自動生成智能固件路徑
+// 自動生成智能韌體路徑
 buildSmartFirmwarePath(basePath, productModel)
 
 // 切換編輯模式（Edit ↔ Confirmed）
@@ -120,9 +71,9 @@ createRedmineTicket()
 copyToClipboard(elementId)
 ```
 
-### 固件下載 & SHA256
+### 韌體下載 & SHA256
 ```javascript
-// 下載固件檔案（支援檔案選擇器）
+// 下載韌體檔案（支援檔案選擇器）
 downloadFirmware()
 
 // 下載 SHA256 檔案
@@ -145,21 +96,21 @@ updateFirmwarePaths()
 
 ### 1. Redmine 工單創建流程
 1. 選擇產品型號
-2. 確認或編輯固件路徑
+2. 確認或編輯韌體路徑
 3. 選擇 Redmine 標籤
 4. 預覽工單內容
 5. 一鍵創建工單
 
-### 2. 固件下載流程
+### 2. 韌體下載流程
 1. 選擇產品（自動生成路徑）
-2. 確認固件和 SHA256 路徑
+2. 確認韌體和 SHA256 路徑
 3. 點擊下載連結
 4. 選擇儲存位置（現代瀏覽器）
 5. 完成下載
 
 ### 3. 路徑編輯功能
 - **啟用編輯**：點擊 "Edit" 按鈕進入編輯模式，輸入框變為可編輯狀態
-- **修改路徑**：在編輯模式下可手動修改固件路徑內容
+- **修改路徑**：在編輯模式下可手動修改韌體路徑內容
 - **確認變更**：修改完成後點擊 "Confirmed" 按鈕確認更改
 - **即時同步**：確認後系統會自動更新以下內容：
   - SHA256 路徑自動同步變更
