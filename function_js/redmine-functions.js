@@ -732,7 +732,7 @@ class RedmineFunctions {
     }
 
     let textToCopy = element.textContent || element.innerText || '';
-    
+
     // 清理文字內容
     if (textToCopy === '-') {
       this.showCopyFeedback(element, '❌ 無內容可複製', 'error');
