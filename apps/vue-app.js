@@ -124,17 +124,14 @@ createApp({
         case 0: // Redmine
           this.loadRedmineModule();
           break;
-        case 1: // PLM
+        case 1: // FW & SHA256
           this.loadPLMModule();
           break;
-        case 2: // Email
+        case 2: // 檢視會議記錄
           this.loadEmailModule();
           break;
-        case 3: // Sync
+        case 3: // Create WF & Email
           this.loadSyncModule();
-          break;
-        case 4: // Report
-          this.loadReportModule();
           break;
       }
     },
@@ -153,7 +150,7 @@ createApp({
         const htmlContent = await htmlResponse.text();
 
         // 更新 tab 內容
-        const redmineTab = this.firmwareTabs.find(tab => tab.name === 'redmine');
+        const redmineTab = this.firmwareTabs.find(tab => tab.name === 'Redmine');
         if (redmineTab) {
           redmineTab.content = htmlContent;
         }
@@ -187,7 +184,7 @@ createApp({
         const htmlContent = await htmlResponse.text();
 
         // 更新 tab 內容
-        const plmTab = this.firmwareTabs.find(tab => tab.name === 'plm');
+        const plmTab = this.firmwareTabs.find(tab => tab.name === 'FW & SHA256');
         if (plmTab) {
           plmTab.content = htmlContent;
         }
@@ -221,7 +218,7 @@ createApp({
         const htmlContent = await htmlResponse.text();
 
         // 更新 tab 內容
-        const emailTab = this.firmwareTabs.find(tab => tab.name === 'email');
+        const emailTab = this.firmwareTabs.find(tab => tab.name === '檢視會議記錄');
         if (emailTab) {
           emailTab.content = htmlContent;
         }
@@ -255,7 +252,7 @@ createApp({
         const htmlContent = await htmlResponse.text();
 
         // 更新 tab 內容
-        const syncTab = this.firmwareTabs.find(tab => tab.name === 'sync');
+        const syncTab = this.firmwareTabs.find(tab => tab.name === 'Create WF & Email');
         if (syncTab) {
           syncTab.content = htmlContent;
         }
