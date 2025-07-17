@@ -278,7 +278,6 @@ class RedmineFunctions {
     console.log('✅ 事件綁定完成');
   }
 
-  // 更新固件路徑
   updateFirmwarePath() {
     const productSelect = document.getElementById('productSelect');
     const firmwarePath = document.getElementById('firmwarePath');
