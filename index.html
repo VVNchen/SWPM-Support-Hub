@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Firmware Release Workflow - 直接開啟版本</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="apps/vue-styles.css" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- 引入 SheetJS 套件 for Redmine Excel 功能 -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="sidebar">
+      <div class="sidebar-toggle" @click="toggleSidebar">
+        <span class="sidebar-toggle-label">Menu</span> ☰
+      </div>
+      <div class="sidebar-item" :class="{ active: activeMainPage === 0 }" @click="showMainPage(0)">
+        🚀 <span>Firmware Release</span>
+      </div>
+      <div class="sidebar-item" :class="{ active: activeMainPage === 1 }" @click="showMainPage(1)">
+        📝 <span>SWPM NoteBook</span>
+      </div>
+    </div>
+
+    <div class="mode-floating">
+      <div class="mode-toggle" @click="toggleDarkMode">
+        <div id="mode-icon">{{ darkMode ? '☀️' : '🌙' }}</div>
+        <div id="mode-label">{{ darkMode ? 'Light' : 'Dark' }}</div>
+      </div>
+    </div>
+
+    <div id="main-pages">
+      <!-- Firmware Release Page -->
+      <div id="fw-release-page" v-show="activeMainPage === 0">
+        <h1>Firmware Release</h1>
+        <direct-tab-component :tabs="firmwareTabs" @tab-changed="onFirmwareTabChanged">
+        </direct-tab-component>
+      </div>
+
+      <!-- SWPM Note Page -->
+      <div id="swpm-note-page" v-show="activeMainPage === 1">
+        <h1>SWPM NoteBook</h1>
+        <direct-tab-component :tabs="swpmTabs" @tab-changed="onSwpmTabChanged">
+        </direct-tab-component>
+      </div>
+    </div>
+  </div>
+
+  <script src="apps/direct-vue-app.js"></script>
+</body>
+
+</html>

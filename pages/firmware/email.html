@@ -1,0 +1,56 @@
+<div class="email-module">
+  <div class="module-header">
+    <h2>📧 Email Management</h2>
+    <p>Manage email templates and send notifications</p>
+  </div>
+
+  <div class="email-config-section">
+    <h3>Email Template</h3>
+    <div class="template-selection">
+      <select id="emailTemplate">
+        <option value="">Select Template...</option>
+      </select>
+      <button id="previewEmail" class="btn btn-secondary">👁️ Preview</button>
+    </div>
+
+    <div id="templateDescription" class="template-description" style="display: none;"></div>
+  </div>
+
+  <div class="email-composition">
+    <div class="form-group">
+      <label for="emailSubject">Subject:</label>
+      <input type="text" id="emailSubject" class="form-control" placeholder="Email subject...">
+    </div>
+
+    <div class="form-group">
+      <label for="emailBody">Body:</label>
+      <textarea id="emailBody" class="form-control" rows="8" placeholder="Email body..."></textarea>
+    </div>
+  </div>
+
+  <div class="recipient-management">
+    <h3>Recipients</h3>
+    <div class="recipient-input">
+      <input type="email" id="recipientEmail" placeholder="Email address" class="form-control">
+      <input type="text" id="recipientName" placeholder="Name (optional)" class="form-control">
+      <button id="addRecipient" class="btn btn-primary">➕ Add</button>
+      <button id="importRecipients" class="btn btn-secondary">📁 Import</button>
+    </div>
+
+    <div id="recipientList" class="recipient-list"></div>
+  </div>
+
+  <div class="email-preview">
+    <h3>Preview</h3>
+    <div id="emailPreview" class="preview-area"></div>
+  </div>
+
+  <div class="email-actions">
+    <button id="sendEmail" class="btn btn-success">📤 Send Email</button>
+    <button class="btn btn-secondary" onclick="window.emailFunctions.clearEmailForm()">🗑️ Clear</button>
+  </div>
+
+  <div class="email-status" id="emailStatus">
+    Ready to compose email
+  </div>
+</div>

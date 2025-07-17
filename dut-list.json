@@ -1,0 +1,182 @@
+[
+  {
+    "Model": "EBM68",
+    "Product_ID": "EBM68",
+    "APLM_ID": "APLM001",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\EBM68\\"
+  },
+  {
+    "Model": "EBA63",
+    "Product_ID": "BR63",
+    "APLM_ID": "APLM002",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\EBA63\\"
+  },
+  {
+    "Model": "EBG15",
+    "Product_ID": "EBG15",
+    "APLM_ID": "APLM003",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\EBG15\\"
+  },
+  {
+    "Model": "EBG19",
+    "Product_ID": "EBG19",
+    "APLM_ID": "APLM004",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\EBG19\\"
+  },
+  {
+    "Model": "GT10",
+    "Product_ID": "GT10",
+    "APLM_ID": "APLM005",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\GT10\\"
+  },
+  {
+    "Model": "GT11",
+    "Product_ID": "GT11",
+    "APLM_ID": "APLM006",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\GT11\\"
+  },
+  {
+    "Model": "GT12",
+    "Product_ID": "GT12",
+    "APLM_ID": "APLM007",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\GT12\\"
+  },
+  {
+    "Model": "GT-AXE16000",
+    "Product_ID": "GT-AXE16000",
+    "APLM_ID": "APLM008",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\GT-AXE16000\\"
+  },
+  {
+    "Model": "GT-AXE11000",
+    "Product_ID": "GT-AXE11000",
+    "APLM_ID": "APLM009",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\GT-AXE11000\\"
+  },
+  {
+    "Model": "GT-AX11000_PRO",
+    "Product_ID": "GT-AX11000_PRO",
+    "APLM_ID": "APLM010",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\GT-AX11000_PRO\\"
+  },
+  {
+    "Model": "GT-AX11000",
+    "Product_ID": "GT-AX11000",
+    "APLM_ID": "APLM011",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\GT-AX11000\\"
+  },
+  {
+    "Model": "RT-AX86U",
+    "Product_ID": "RT-AX86U",
+    "APLM_ID": "APLM012",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AX86U\\"
+  },
+  {
+    "Model": "RT-AX88U",
+    "Product_ID": "RT-AX88U",
+    "APLM_ID": "APLM013",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AX88U\\"
+  },
+  {
+    "Model": "RT-AX89X",
+    "Product_ID": "RT-AX89X",
+    "APLM_ID": "APLM014",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AX89X\\"
+  },
+  {
+    "Model": "RT-AX92U",
+    "Product_ID": "RT-AX92U",
+    "APLM_ID": "APLM015",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AX92U\\"
+  },
+  {
+    "Model": "RT-AX95Q",
+    "Product_ID": "RT-AX95Q",
+    "APLM_ID": "APLM016",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AX95Q\\"
+  },
+  {
+    "Model": "RT-AX96U",
+    "Product_ID": "RT-AX96U",
+    "APLM_ID": "APLM017",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AX96U\\"
+  },
+  {
+    "Model": "ZenWiFi-AX6600",
+    "Product_ID": "ZenWiFi-AX6600",
+    "APLM_ID": "APLM018",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\ZenWiFi-AX6600\\"
+  },
+  {
+    "Model": "ZenWiFi-BE11000",
+    "Product_ID": "ZenWiFi-BE11000",
+    "APLM_ID": "APLM019",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\ZenWiFi-BE11000\\"
+  },
+  {
+    "Model": "ZenWiFi-XD6",
+    "Product_ID": "ZenWiFi-XD6",
+    "APLM_ID": "APLM020",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\ZenWiFi-XD6\\"
+  },
+  {
+    "Model": "ZenWiFi-XD4",
+    "Product_ID": "ZenWiFi-XD4",
+    "APLM_ID": "APLM021",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\ZenWiFi-XD4\\"
+  },
+  {
+    "Model": "TUF-AX3000",
+    "Product_ID": "TUF-AX3000",
+    "APLM_ID": "APLM022",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\TUF-AX3000\\"
+  },
+  {
+    "Model": "TUF-AX5400",
+    "Product_ID": "TUF-AX5400",
+    "APLM_ID": "APLM023",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\TUF-AX5400\\"
+  },
+  {
+    "Model": "RT-AC86U",
+    "Product_ID": "RT-AC86U",
+    "APLM_ID": "APLM024",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AC86U\\"
+  },
+  {
+    "Model": "RT-AC88U",
+    "Product_ID": "RT-AC88U",
+    "APLM_ID": "APLM025",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AC88U\\"
+  },
+  {
+    "Model": "RT-AC3100",
+    "Product_ID": "RT-AC3100",
+    "APLM_ID": "APLM026",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AC3100\\"
+  },
+  {
+    "Model": "RT-AC68U",
+    "Product_ID": "RT-AC68U",
+    "APLM_ID": "APLM027",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AC68U\\"
+  },
+  {
+    "Model": "RT-AC66U_B1",
+    "Product_ID": "RT-AC66U_B1",
+    "APLM_ID": "APLM028",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AC66U_B1\\"
+  },
+  {
+    "Model": "ExpertWiFi-EBR63",
+    "Product_ID": "ExpertWiFi-EBR63",
+    "APLM_ID": "APLM029",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\ExpertWiFi-EBR63\\"
+  },
+  {
+    "Model": "RT-AX82U",
+    "Product_ID": "RT-AX82U",
+    "APLM_ID": "APLM030",
+    "FW_Path": "\\\\APZA001NFS\\New-Public\\FW\\RT-AX82U\\"
+  }
+]

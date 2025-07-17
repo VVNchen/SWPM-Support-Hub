@@ -1,0 +1,48 @@
+<div class="report-module">
+  <div class="module-header">
+    <h2>📊 Report Generation</h2>
+    <p>Generate comprehensive reports and analytics</p>
+  </div>
+
+  <div class="report-template-section">
+    <h3>Report Template</h3>
+    <div class="template-selection">
+      <select id="reportTemplate">
+        <option value="">Select Report Template...</option>
+      </select>
+    </div>
+    <div id="templateDescription" class="template-description" style="display: none;"></div>
+  </div>
+
+  <div id="reportParameters" class="report-parameters" style="display: none;">
+    <!-- Parameters will be dynamically loaded based on template -->
+  </div>
+
+  <div class="report-actions">
+    <button id="generateReport" class="btn btn-primary">📈 Generate Report</button>
+    <button id="scheduleReport" class="btn btn-secondary">⏰ Schedule Report</button>
+  </div>
+
+  <div id="reportLoading" class="loading-section" style="display: none;">
+    <div class="loading-spinner"></div>
+    <p>Generating report... Please wait.</p>
+  </div>
+
+  <div id="reportContent" class="report-content" style="display: none;">
+    <!-- Generated report content will appear here -->
+  </div>
+
+  <div class="export-actions" style="display: none;" id="exportActions">
+    <h3>Export Options</h3>
+    <div class="export-buttons">
+      <button id="exportPdf" class="btn btn-secondary">📄 Export PDF</button>
+      <button id="exportExcel" class="btn btn-secondary">📊 Export Excel</button>
+      <button id="exportCsv" class="btn btn-secondary">📋 Export CSV</button>
+    </div>
+  </div>
+
+  <div class="report-history-section">
+    <h3>Report History</h3>
+    <div id="reportHistory" class="history-list"></div>
+  </div>
+</div>

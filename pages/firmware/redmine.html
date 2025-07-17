@@ -1,0 +1,104 @@
+<div class="redmine-container">
+  <h2>🎫 Redmine Ticket Creation</h2>
+
+  <!-- 1. Choose your product -->
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-icon">📱</span>
+      <span class="label-text">Choose your product</span>
+      <span class="required">*</span>
+    </label>
+
+    <select id="productSelect" class="form-select product-select-scrollable"
+      onchange="updateFirmwarePath(); updateCreateButton();">
+      <option value="">Please select a product...</option>
+      <!-- 產品選項將從 redmine-functions.js 動態載入 -->
+    </select> <input type="file" id="excelFileInput" accept=".xlsx,.xls" style="display: none;"
+      onchange="handleExcelUpload(event)">
+
+    <!-- <small class="form-hint">💡 產品列表從 DUT_List.xlsx 動態載入，每次切換 Tab 都會重新讀取最新資料</small> -->
+  </div>
+
+  <!-- 2. Firmware -->
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-icon">💾</span>
+      <span class="label-text">Firmware</span>
+      <span class="required">*</span>
+    </label>
+
+    <div class="firmware-section">
+      <div class="firmware-container">
+        <div class="firmware-path-input">
+          <input id="firmwarePath" class="form-input"
+            placeholder="Smart firmware path will be generated after selecting a product..."
+            oninput="updatePreview(); updateCreateButton();" onchange="updatePreview(); updateCreateButton();" />
+        </div>
+        <div class="firmware-buttons-row">
+          <button type="button" class="btn btn-secondary" onclick="toggleEditMode()" title="Toggle edit mode"
+            id="editModeBtn">
+            ✏️ Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Select Redmine Tag -->
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-icon">🏷️</span>
+      <span class="label-text">Select Redmine Tag</span>
+      <span class="required">*</span>
+    </label>
+    <select id="redmineTagSelect" class="form-select" onchange="updatePreview(); updateCreateButton();">
+      <option value="">Please select a tag...</option>
+      <option value="test-request">Test_Request</option>
+      <option value="build-request">Build_Request</option>
+      <option value="signature-test-request">Signature_test_request</option>
+      <option value="factory-regression">Factory_Regression</option>
+      <option value="standard-regression">Standard_Regression</option>
+      <option value="repeater-regression">Repeater_Regression</option>
+      <option value="batch-regression">Batch_Regression</option>
+      <option value="expert-wifi-regression">Expert_WiFi_Regression</option>
+    </select>
+  </div>
+
+  <!-- Preview Information -->
+  <div id="previewSection" class="preview-section hidden">
+    <h3>📋 Preview Information</h3>
+    <div class="preview-content">
+      <div class="preview-item">
+        <strong>Redmine Project:</strong>
+        <span id="previewRedmineProject">-</span>
+      </div>
+      <div class="preview-item">
+        <strong>Tag:</strong>
+        <span id="previewTag">-</span>
+      </div>
+      <div class="preview-item">
+        <strong>主旨:</strong>
+        <span id="previewSubject">-</span>
+      </div>
+      <div class="preview-item">
+        <strong>概述:</strong>
+        <span id="previewFirmware">Firmware: -</span>
+      </div>
+      <div class="preview-item">
+        <strong>被分派者:</strong>
+        <span>SQ</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. Action Buttons -->
+  <div class="button-group">
+    <button id="createBtn" class="btn btn-primary" onclick="createRedmineTicket()" disabled>
+      🚀 Create Redmine Ticket
+    </button>
+    <button class="btn btn-warning" onclick="resetForm()">
+      🔄 Reset
+    </button>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="plm-container">
+  <h2>📊 PLM 數據管理</h2>
+
+  <!-- PLM 功能區域 -->
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-icon">📂</span>
+      <span class="label-text">選擇數據來源</span>
+    </label>
+
+    <div class="data-source-controls">
+      <button type="button" class="btn btn-primary" onclick="uploadDataFile()">
+        📤 上傳數據檔案
+      </button>
+      <button type="button" class="btn btn-info" onclick="syncFromServer()">
+        🔄 從伺服器同步
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="exportData()">
+        📥 匯出數據
+      </button>
+    </div>
+
+    <input type="file" id="dataFileInput" accept=".xlsx,.csv,.json" style="display: none;"
+      onchange="handleDataUpload(event)">
+  </div>
+
+  <!-- 數據預覽區域 -->
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-icon">👁️</span>
+      <span class="label-text">數據預覽</span>
+    </label>
+
+    <div id="dataPreview" class="data-preview">
+      <p>等待數據載入...</p>
+    </div>
+  </div>
+
+  <!-- 操作按鈕 -->
+  <div class="button-group">
+    <button id="processBtn" class="btn btn-success" onclick="processData()" disabled>
+      ⚙️ 處理數據
+    </button>
+    <button class="btn btn-warning" onclick="validateData()">
+      ✅ 驗證數據
+    </button>
+    <button class="btn btn-cancel" onclick="clearData()">
+      🗑️ 清除數據
+    </button>
+  </div>
+</div>
