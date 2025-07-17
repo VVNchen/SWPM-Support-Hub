@@ -156,8 +156,6 @@ class FwSha256Functions {
     if (!selectedValue) {
       fwPath.value = '';
       sha256Path.value = '';
-      fwPath.placeholder = 'Select a product to generate firmware path...';
-      sha256Path.placeholder = 'SHA256 file path will be generated...';
       return;
     }
 
@@ -168,14 +166,12 @@ class FwSha256Functions {
       // 生成智能固件路徑
       const smartFwPath = this.buildSmartFirmwarePath(baseFwPath, selectedValue);
       fwPath.value = smartFwPath;
-      fwPath.placeholder = `Smart path for ${selectedValue}`;
 
       // 生成 SHA256 路徑
       this.updateSha256Path();
     } else {
       fwPath.value = '';
       sha256Path.value = '';
-      fwPath.placeholder = `No FW_Path found for ${selectedValue}`;
     }
 
     // 更新下載連結狀態
@@ -523,11 +519,9 @@ class FwSha256Functions {
     if (productSelect) productSelect.value = '';
     if (fwPath) {
       fwPath.value = '';
-      fwPath.placeholder = 'Select a product to generate firmware path...';
     }
     if (sha256Path) {
       sha256Path.value = '';
-      sha256Path.placeholder = 'SHA256 file path will be generated...';
     }
     if (previewSection) previewSection.classList.add('hidden');
 
