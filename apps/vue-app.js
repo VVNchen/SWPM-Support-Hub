@@ -57,7 +57,7 @@ createApp({
       // Firmware tabs - 只保留 redmine 功能，其他簡化
       firmwareTabs: [
         {
-          name: 'redmine',
+          name: 'Redmine',
           content: `
             <div id="redmine-loading" style="padding: 20px; text-align: center;">
               <h3>🔄 正在載入 Redmine 功能...</h3>
@@ -72,20 +72,16 @@ createApp({
           `
         },
         {
-          name: 'plm',
-          content: '<div style="padding: 20px;"><h2>PLM</h2><p>功能開發中...</p></div>'
+          name: 'FW & SHA256',
+          content: '<div style="padding: 20px;"><h2>Download FW & SHA256</h2><p>功能開發中...</p></div>'
         },
         {
-          name: 'email',
-          content: '<div style="padding: 20px;"><h2>Email</h2><p>功能開發中...</p></div>'
+          name: '檢視會議記錄',
+          content: '<div style="padding: 20px;"><h2>檢視會議記錄</h2><p>功能開發中...</p></div>'
         },
         {
-          name: 'sync',
-          content: '<div style="padding: 20px;"><h2>Sync</h2><p>功能開發中...</p></div>'
-        },
-        {
-          name: 'report',
-          content: '<div style="padding: 20px;"><h2>Report</h2><p>功能開發中...</p></div>'
+          name: 'Create WF & Email',
+          content: '<div style="padding: 20px;"><h2>WF & Email</h2><p>功能開發中...</p></div>'
         }
       ],
 
