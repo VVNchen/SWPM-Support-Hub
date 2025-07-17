@@ -288,7 +288,6 @@ class RedmineFunctions {
     const selectedValue = productSelect.value;
     if (!selectedValue) {
       firmwarePath.value = '';
-      firmwarePath.placeholder = 'Smart firmware path will be generated after selecting a product...';
       this.updatePreview();
       return;
     }
@@ -300,10 +299,8 @@ class RedmineFunctions {
       // 產生智能路徑
       const smartPath = this.buildSmartFirmwarePath(fwPath, selectedValue);
       firmwarePath.value = smartPath;
-      firmwarePath.placeholder = `Smart path for ${selectedValue}`;
     } else {
       firmwarePath.value = '';
-      firmwarePath.placeholder = `No FW_Path found for ${selectedValue}`;
     }
 
     this.updatePreview();
@@ -646,7 +643,6 @@ class RedmineFunctions {
     if (productSelect) productSelect.value = '';
     if (firmwarePath) {
       firmwarePath.value = '';
-      firmwarePath.placeholder = 'Smart firmware path will be generated after selecting a product...';
     }
     if (redmineTagSelect) redmineTagSelect.value = '';
     if (previewSection) previewSection.classList.add('hidden');
