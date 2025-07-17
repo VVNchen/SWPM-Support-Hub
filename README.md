@@ -231,12 +231,7 @@ toggleDarkMode()
 - **GitHub**：[https://github.com/VVNchen/vue_test](https://github.com/VVNchen/vue_test)
 - **Demo 網站**：[GitHub Pages](https://vvnchen.github.io/vue_test/)
 
-## 🙏 致謝
-
 - [Vue.js](https://vuejs.org/) - 漸進式 JavaScript 框架
 - [SheetJS](https://sheetjs.com/) - Excel 檔案處理
 - [GitHub Pages](https://pages.github.com/) - 靜態網站託管
 
----
-
-**⭐ 如果這個專案對您有幫助，請給個星星支持！**
