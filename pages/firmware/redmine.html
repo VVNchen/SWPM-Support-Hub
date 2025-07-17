@@ -27,11 +27,10 @@
     <div class="firmware-section">
       <div class="firmware-container">
         <div class="firmware-path-input">
-          <input id="firmwarePath" class="form-input"
-            placeholder="Smart firmware path will be generated after selecting a product..."
-            oninput="updatePreview(); updateCreateButton();" onchange="updatePreview(); updateCreateButton();" />
+          <input id="firmwarePath" class="form-input" placeholder="" oninput="updatePreview(); updateCreateButton();"
+            onchange="updatePreview(); updateCreateButton();" />
         </div>
-        <div class="firmware-buttons-row">
+        <div class="firmware-buttons-row" style="margin-top: 8px;">
           <button type="button" class="btn btn-secondary" onclick="toggleEditMode()" title="Toggle edit mode"
             id="editModeBtn">
             ✏️ Edit
