@@ -3,7 +3,7 @@ class RedmineFunctions {
   constructor() {
     this.selectedDut = null;
     this.firmwareConfirmed = false;
-    this.dutList = [];
+    this.routerList = [];
   }
 
   // 初始化 Redmine 模組
@@ -51,7 +51,7 @@ class RedmineFunctions {
           <p><strong>解決方案:</strong></p>
           <ul>
             <li>檢查網路連線</li>
-            <li>確認 datasheet/DUT_List.xlsx 檔案存在</li>
+            <li>確認 datasheet/Router_List.xlsx 檔案存在</li>
             <li>重新載入頁面</li>
           </ul>
         </div>
@@ -146,7 +146,7 @@ class RedmineFunctions {
     console.log('✅ SheetJS 庫已準備好');
 
     try {
-      const response = await fetch('datasheet/DUT_List.xlsx');
+      const response = await fetch('datasheet/Router_List.xlsx');
       if (!response.ok) {
         throw new Error(`Excel 檔案載入失敗: HTTP ${response.status}`);
       }
@@ -174,14 +174,14 @@ class RedmineFunctions {
   async loadProductsFromJSON() {
     console.log('📄 嘗試從 JSON 備用檔案載入產品...');
 
-    // 嘗試現有的 dut-list.json
+    // 嘗試現有的 router-list.json
     let response;
     try {
-      response = await fetch('dut-list.json');
+      response = await fetch('router-list.json');
     } catch (error) {
-      // 如果 dut-list.json 不存在，嘗試備用檔案
+      // 如果 router-list.json 不存在，嘗試備用檔案
       console.log('📄 嘗試載入備用 JSON 檔案...');
-      response = await fetch('dut-list-backup.json');
+      response = await fetch('router-list-backup.json');
     }
 
     if (!response.ok) {
@@ -204,7 +204,7 @@ class RedmineFunctions {
     if (!productSelect) return;
 
     // 儲存產品列表
-    this.dutList = products;
+    this.routerList = products;
 
     // 清空選單
     productSelect.innerHTML = '<option value="">Please select a product...</option>';
@@ -234,7 +234,7 @@ class RedmineFunctions {
     if (productSelect) {
       productSelect.innerHTML = `
         <option value="">❌ Loading failed</option>
-        <option value="" disabled>Please check datasheet/DUT_List.xlsx or dut-list.json</option>
+        <option value="" disabled>Please check datasheet/Router_List.xlsx or router-list.json</option>
       `;
     }
   }
@@ -602,7 +602,7 @@ class RedmineFunctions {
   // 取得 Redmine 專案
   getRedmineProject(productModel) {
     // 從產品列表中查找對應的 Redmine_Project
-    const product = this.dutList.find(p => p.Model === productModel);
+    const product = this.routerList.find(p => p.Model === productModel);
     return product?.Redmine_Project || 'Default Project';
   }
 

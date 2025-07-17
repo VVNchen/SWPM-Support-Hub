@@ -9,7 +9,7 @@ echo 伺服器地址: http://localhost:8000
 echo 主頁面: http://localhost:8000/index.html
 echo.
 echo 🎯 享受完整的模組化功能：
-echo   ✅ DUT_list 動態載入
+echo   ✅ Router_list 動態載入
 echo   ✅ 智能固件搜尋  
 echo   ✅ 即時預覽驗證
 echo   ✅ 模組化維護
