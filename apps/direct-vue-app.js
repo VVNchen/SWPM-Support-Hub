@@ -1,4 +1,3 @@
-// 直接開啟版本 - 清理後的乾淨版本
 const DirectTabComponent = {
   props: {
     tabs: {

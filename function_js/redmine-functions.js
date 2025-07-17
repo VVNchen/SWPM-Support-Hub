@@ -674,6 +674,9 @@ class RedmineFunctions {
     window.cancelOperation = () => this.cancelOperation();
     window.toggleEditMode = () => this.toggleEditMode();
 
+    // Copy to clipboard 功能
+    window.copyToClipboard = (elementId) => this.copyToClipboard(elementId);
+
     // 測試函數
     window.testButtonState = () => {
       console.log('🧪 測試按鈕狀態');
@@ -717,6 +720,109 @@ class RedmineFunctions {
 
     // 更新預覽以反映當前狀態
     this.updatePreview();
+  }
+
+  // Copy to clipboard 功能
+  async copyToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+      console.error(`❌ 找不到元素: ${elementId}`);
+      this.showCopyFeedback(null, '❌ 元素不存在', 'error');
+      return;
+    }
+
+    let textToCopy = element.textContent || element.innerText || '';
+    
+    // 清理文字內容
+    if (textToCopy === '-') {
+      this.showCopyFeedback(element, '❌ 無內容可複製', 'error');
+      return;
+    }
+
+    // 如果是概述，移除 "Firmware: " 前綴
+    if (elementId === 'previewFirmware' && textToCopy.startsWith('Firmware: ')) {
+      textToCopy = textToCopy.replace('Firmware: ', '');
+    }
+
+    if (!textToCopy.trim()) {
+      this.showCopyFeedback(element, '❌ 無內容可複製', 'error');
+      return;
+    }
+
+    try {
+      // 使用現代瀏覽器的 Clipboard API
+      await navigator.clipboard.writeText(textToCopy);
+      console.log(`✅ 已複製到剪貼簿: ${textToCopy}`);
+      this.showCopyFeedback(element, '✅ 已複製到剪貼簿', 'success');
+    } catch (err) {
+      console.warn('⚠️ Clipboard API 失敗，使用降級方案:', err);
+      // 降級處理方案
+      this.fallbackCopyTextToClipboard(textToCopy, element);
+    }
+  }
+
+  // 降級複製功能（針對不支援 Clipboard API 的瀏覽器）
+  fallbackCopyTextToClipboard(text, element) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        console.log('✅ 降級複製成功');
+        this.showCopyFeedback(element, '✅ 已複製到剪貼簿', 'success');
+      } else {
+        console.error('❌ 降級複製失敗');
+        this.showCopyFeedback(element, '❌ 複製失敗', 'error');
+      }
+    } catch (err) {
+      console.error('❌ 降級複製異常:', err);
+      this.showCopyFeedback(element, '❌ 複製失敗', 'error');
+    }
+
+    document.body.removeChild(textArea);
+  }
+
+  // 顯示複製回饋
+  showCopyFeedback(element, message, type = 'success') {
+    // 移除既有的回饋元素
+    const existingFeedback = document.querySelector('.copy-feedback');
+    if (existingFeedback) {
+      existingFeedback.remove();
+    }
+
+    // 建立回饋元素
+    const feedback = document.createElement('div');
+    feedback.className = `copy-feedback${type === 'error' ? ' error' : ''}`;
+    feedback.textContent = message;
+
+    // 計算位置
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      feedback.style.left = (rect.left + rect.width / 2 - 50) + 'px';
+      feedback.style.top = (rect.top - 40) + 'px';
+    } else {
+      // 如果沒有元素，顯示在螢幕中央
+      feedback.style.left = '50%';
+      feedback.style.top = '20%';
+      feedback.style.transform = 'translateX(-50%)';
+    }
+
+    // 加入到頁面
+    document.body.appendChild(feedback);
+
+    // 自動移除
+    setTimeout(() => {
+      if (feedback.parentNode) {
+        feedback.parentNode.removeChild(feedback);
+      }
+    }, 2000);
   }
 }
 

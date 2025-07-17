@@ -654,3 +654,104 @@
 .dark .product-item.no-results {
   color: #999;
 }
+
+/* Copy to clipboard button styles */
+.copy-btn {
+  background: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0.8;
+}
+
+.copy-btn:hover {
+  background: #0056b3;
+  border-color: #004085;
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.copy-btn:active {
+  transform: translateY(0);
+  background: #004085;
+}
+
+/* Preview item layout adjustments */
+.preview-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 4px 0;
+}
+
+.preview-item strong {
+  min-width: 100px;
+  color: var(--text-color);
+}
+
+.preview-item span {
+  flex: 1;
+  margin: 0 8px;
+  word-break: break-all;
+  color: var(--text-color);
+  background: var(--input-bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+/* Dark mode for copy buttons */
+.dark .copy-btn {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.dark .copy-btn:hover {
+  background: #004085;
+  border-color: #003f7f;
+}
+
+/* Copy feedback notification */
+.copy-feedback {
+  position: fixed;
+  background: #28a745;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1000;
+  pointer-events: none;
+  animation: copyFeedback 2s ease-out forwards;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.copy-feedback.error {
+  background: #dc3545;
+}
+
+@keyframes copyFeedback {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.9);
+  }
+}
