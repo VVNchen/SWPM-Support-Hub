@@ -113,6 +113,14 @@ createApp({
               </button>
             </div>
           `
+        },
+        {
+          name: 'Template Library',
+          content: '<div style="padding: 20px;"><h2>📚 Template Library</h2><p>手冊範本庫功能開發中...</p></div>'
+        },
+        {
+          name: 'Manual History',
+          content: '<div style="padding: 20px;"><h2>📋 Manual History</h2><p>手冊生成歷史記錄功能開發中...</p></div>'
         }
       ]
     }
@@ -133,6 +141,13 @@ createApp({
 
     showMainPage(pageIndex) {
       this.activeMainPage = pageIndex;
+      
+      // 如果切換到 User Manual 頁面 (pageIndex === 2)，自動載入第一個 tab
+      if (pageIndex === 2) {
+        this.$nextTick(() => {
+          this.loadGenerateManualModule();
+        });
+      }
     },
 
     onFirmwareTabChanged(tabIndex) {
@@ -166,6 +181,12 @@ createApp({
       switch (tabIndex) {
         case 0: // Generate Manual
           this.loadGenerateManualModule();
+          break;
+        case 1: // Template Library
+          console.log('Template Library tab selected - 功能開發中');
+          break;
+        case 2: // Manual History
+          console.log('Manual History tab selected - 功能開發中');
           break;
       }
     },
