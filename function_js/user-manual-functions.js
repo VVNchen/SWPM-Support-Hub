@@ -5,6 +5,8 @@ class UserManualFunctions {
     this.selectedFormat = '';
     this.includedSections = [];
     this.currentLang = 'en'; // 'en' or 'zh'
+    // 支援下載的語言代碼
+    this.supportedLangs = ['zh-tw', 'zh-cn', 'vi-vn', 'th-th', 'ko-kr', 'ja-jp', 'id-id', 'pt-pt', 'pt-br', 'uk-ua', 'tr-tr', 'ru-ru', 'ro-ro', 'pl-pl', 'nl-nl', 'it-it', 'hu-hu', 'he-il', 'fr-fr', 'es-es', 'de-de', 'cs-cz'];
   }
 
   // 初始化模組
@@ -30,6 +32,8 @@ class UserManualFunctions {
       this.bindLangToggle();
       // 首次渲染 FAQ
       this.renderFAQPage();
+      // 綁定確認按鈕
+      this.bindConfirmButton();
 
       console.log('✅ User Manual 模組初始化完成');
 
@@ -634,34 +638,58 @@ class UserManualFunctions {
   }
 
   // 下載選定的 FAQ
-  downloadSelectedFaqs() {
+  async downloadSelectedFaqs() {
     const selectedRows = Array.from(document.querySelectorAll('.faq-item-checkbox:checked')).map(cb => parseInt(cb.dataset.rowIdx));
     const langs = Array.from(document.querySelectorAll('.lang-cb:checked')).map(cb => cb.value);
     if (!selectedRows.length || !langs.length) return;
-    langs.forEach(lang => {
-      const idx = lang === 'zh' ? 29 : 28;
-      let content = '';
-      let currentCat = null;
+    // 選擇或重用下載資料夾
+    if (!this.downloadDirHandle) {
+      try {
+        this.downloadDirHandle = await window.showDirectoryPicker();
+      } catch (err) {
+        console.error('❌ 資料夾選擇取消或失敗:', err);
+        return;
+      }
+    }
+    for (const lang of langs) {
+      // 動態查找語言欄位索引
+      const idx = this.faqHeader.findIndex(h => h === lang);
+      if (idx < 0) {
+        console.warn(`⚠️ 找不到語言欄位: ${lang}`);
+        continue;
+      }
+      // 依分類分組使用者選擇項目
+      const grouped = {};
       selectedRows.forEach(rIdx => {
         const row = this.faqRows[rIdx];
-        const category = row[1];
+        const category = row[1] || 'Uncategorized';
         const text = (row[idx] || '').replace(/\[.*?\]/g, '').trim();
-        const url = row[25] || '';
-        if (!category || !text) return;
-        if (category !== currentCat) {
-          content += `## ${category}\n`;
-          currentCat = category;
-        }
-        content += `- ${text} (${url})\n`;
+        const url = row[25] || '#';
+        if (!text) return;
+        if (!grouped[category]) grouped[category] = [];
+        grouped[category].push({ text, url });
       });
-      const blob = new Blob([content], { type: 'text/plain' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `FAQ_${lang}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    });
+      // 組裝 HTML 內容
+      let content = '';
+      Object.keys(grouped).forEach(category => {
+        content += `<h2>${category}</h2>`;
+        grouped[category].forEach(item => {
+          content += `<p><a href=\"${item.url}\">${item.text}</a></p>`;
+        });
+      });
+      const htmlDoc = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>${content}</body></html>`;
+      // 寫入文件
+      try {
+        const fileName = `user_manual_${lang}.doc`;
+        const fileHandle = await this.downloadDirHandle.getFileHandle(fileName, { create: true });
+        const writable = await fileHandle.createWritable();
+        await writable.write(htmlDoc);
+        await writable.close();
+      } catch (err) {
+        console.error(`❌ 寫入 ${lang} 檔案失敗:`, err);
+      }
+    }
+    this.showSuccess('✅ 所有 FAQ 檔案已儲存至: ' + this.downloadDirHandle.name);
   }
 
   // 下載所有 FAQ
@@ -705,6 +733,45 @@ class UserManualFunctions {
   showError(message) {
     console.error('❌', message);
     // 可以在這裡加入更好的 UI 提示
+  }
+
+  bindConfirmButton() {
+    const btn = document.getElementById('confirmFaqBtn');
+    const downloadSection = document.getElementById('faqDownloadOptions');
+    const langContainer = document.getElementById('languageCheckboxes');
+    if (!btn || !downloadSection || !langContainer) return;
+    btn.onclick = () => {
+      // 清空並生成語言選項
+      langContainer.innerHTML = '';
+      this.supportedLangs.forEach(code => {
+        const label = document.createElement('label');
+        label.style.marginRight = '12px';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.value = code; cb.className = 'lang-cb';
+        // 綁定 onchange 更新下載按鈕狀態
+        cb.onchange = () => this.updateDownloadButtonState();
+        label.append(cb, ` ${code}`);
+        langContainer.appendChild(label);
+      });
+      // 加入全選
+      const selectAll = document.createElement('label');
+      selectAll.style.fontWeight = 'bold';
+      const allCb = document.createElement('input');
+      allCb.type = 'checkbox'; allCb.onclick = e => {
+        const checked = e.target.checked;
+        langContainer.querySelectorAll('input.lang-cb').forEach(cb => cb.checked = checked);
+        this.updateDownloadButtonState();
+      };
+      selectAll.append(allCb, ' 全選');
+      langContainer.prepend(selectAll);
+      // 顯示下載區塊
+      downloadSection.style.display = 'block';
+      // 預設勾選所有 FAQ 項目
+      document.querySelectorAll('.faq-item-checkbox').forEach(cb => cb.checked = true);
+      this.bindDownloadButton();
+      // 初始化按鈕狀態
+      this.updateDownloadButtonState();
+    };
   }
 }
 
