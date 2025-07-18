@@ -95,6 +95,25 @@ createApp({
           name: 'Note2',
           content: '<div style="padding: 20px;"><h2>SWPM Note 2</h2><p>筆記功能開發中...</p></div>'
         }
+      ],
+
+      // User Manual tabs
+      userManualTabs: [
+        {
+          name: 'Generate Manual',
+          content: `
+            <div id="generate-manual-loading" style="padding: 20px; text-align: center;">
+              <h3>🔄 正在載入 Generate Manual 功能...</h3>
+              <p>如果載入時間過長，請點擊下方按鈕手動重試：</p>
+              <button onclick="window.manualInitGenerateManual()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                🚀 手動載入 Generate Manual
+              </button>
+              <button onclick="location.reload()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                🔄 重新載入頁面
+              </button>
+            </div>
+          `
+        }
       ]
     }
   },
@@ -138,6 +157,17 @@ createApp({
 
     onSwpmTabChanged(tabIndex) {
       console.log('SWPM tab 切換至:', tabIndex);
+    },
+
+    onUserManualTabChanged(tabIndex) {
+      console.log('User Manual tab 切換至:', tabIndex);
+
+      // 根據 tab 載入對應的模組
+      switch (tabIndex) {
+        case 0: // Generate Manual
+          this.loadGenerateManualModule();
+          break;
+      }
     },
 
     // 載入 Redmine 模組
@@ -276,6 +306,40 @@ createApp({
       }
     },
 
+    // 載入 Generate Manual 模組
+    async loadGenerateManualModule() {
+      console.log('📥 載入 Generate Manual 模組...');
+
+      try {
+        // 載入 HTML 模板
+        const htmlResponse = await fetch('pages/user-manual/generate-manual.html');
+        const htmlContent = await htmlResponse.text();
+
+        // 更新 tab 內容
+        const generateManualTab = this.userManualTabs.find(tab => tab.name === 'Generate Manual');
+        if (generateManualTab) {
+          generateManualTab.content = htmlContent;
+        }
+
+        // 等待 DOM 更新後載入 JS 功能
+        this.$nextTick(async () => {
+          await this.loadScript('function_js/user-manual-functions.js');
+
+          // 初始化 Generate Manual 功能
+          if (window.userManualFunctions) {
+            setTimeout(() => {
+              window.userManualFunctions.initialize();
+            }, 100);
+          }
+        });
+
+        console.log('✅ Generate Manual 模組載入成功');
+      } catch (error) {
+        console.error('❌ Generate Manual 模組載入失敗:', error);
+        this.showUserManualModuleError('Generate Manual', error.message);
+      }
+    },
+
     // 動態載入 JavaScript 檔案
     loadScript(src) {
       return new Promise((resolve, reject) => {
@@ -296,6 +360,22 @@ createApp({
     // 顯示模組載入錯誤
     showModuleError(moduleName, errorMessage) {
       const tab = this.firmwareTabs.find(tab => tab.name === moduleName);
+      if (tab) {
+        tab.content = `
+          <div style="padding: 20px; text-align: center; color: red;">
+            <h3>❌ ${moduleName} 模組載入失敗</h3>
+            <p>錯誤: ${errorMessage}</p>
+            <button onclick="location.reload()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px;">
+              🔄 重新載入
+            </button>
+          </div>
+        `;
+      }
+    },
+
+    // 顯示 User Manual 模組載入錯誤
+    showUserManualModuleError(moduleName, errorMessage) {
+      const tab = this.userManualTabs.find(tab => tab.name === moduleName);
       if (tab) {
         tab.content = `
           <div style="padding: 20px; text-align: center; color: red;">
@@ -377,6 +457,12 @@ createApp({
     window.manualInitRedmine = () => {
       if (window.redmineFunctions) {
         window.redmineFunctions.initialize();
+      }
+    };
+
+    window.manualInitGenerateManual = () => {
+      if (window.userManualFunctions) {
+        window.userManualFunctions.initialize();
       }
     };
 

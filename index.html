@@ -25,7 +25,7 @@
         📝 <span>SWPM NoteBook</span>
       </div>
       <div class="sidebar-item" :class="{ active: activeMainPage === 2 }" @click="showMainPage(2)">
-        📖 <span>User Manual</span>
+        📖 <span>Generate User Manual</span>
       </div>
     </div>
 
@@ -54,10 +54,8 @@
       <!-- User Manual Page -->
       <div id="user-manual-page" v-show="activeMainPage === 2">
         <h1>User Manual</h1>
-        <div class="manual-container">
-          <h2>📖 使用說明書</h2>
-          <p>這裡將顯示系統的使用說明和操作指南。</p>
-        </div>
+        <direct-tab-component :tabs="userManualTabs" @tab-changed="onUserManualTabChanged">
+        </direct-tab-component>
       </div>
     </div>
   </div>

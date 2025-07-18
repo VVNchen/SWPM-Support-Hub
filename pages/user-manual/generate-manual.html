@@ -1,0 +1,126 @@
+<div class="user-manual-container">
+  <h2>📖 Generate User Manual</h2>
+
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-text">Select Manual Type</span>
+      <span class="required">*</span>
+    </label>
+    <select id="manualTypeSelect" class="form-select" onchange="updateManualPreview(); updateGenerateButton();">
+      <option value="">Please select a manual type...</option>
+      <option value="quick-start">Quick Start Guide</option>
+      <option value="user-guide">Complete User Guide</option>
+      <option value="admin-guide">Administrator Guide</option>
+      <option value="troubleshooting">Troubleshooting Guide</option>
+      <option value="api-reference">API Reference</option>
+    </select>
+  </div>
+
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-text">Target Audience</span>
+      <span class="required">*</span>
+    </label>
+    <select id="audienceSelect" class="form-select" onchange="updateManualPreview(); updateGenerateButton();">
+      <option value="">Please select target audience...</option>
+      <option value="end-user">End Users</option>
+      <option value="administrator">System Administrators</option>
+      <option value="developer">Developers</option>
+      <option value="support-team">Support Team</option>
+    </select>
+  </div>
+
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-text">Output Format</span>
+      <span class="required">*</span>
+    </label>
+    <select id="formatSelect" class="form-select" onchange="updateManualPreview(); updateGenerateButton();">
+      <option value="">Please select output format...</option>
+      <option value="pdf">PDF Document</option>
+      <option value="html">HTML Web Page</option>
+      <option value="markdown">Markdown File</option>
+      <option value="word">Microsoft Word</option>
+    </select>
+  </div>
+
+  <div class="form-section">
+    <label class="form-label">
+      <span class="label-text">Include Sections</span>
+    </label>
+    <div class="checkbox-group">
+      <label class="checkbox-item">
+        <input type="checkbox" id="includeIntro" onchange="updateManualPreview();" checked>
+        <span>Introduction</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="includeFeatures" onchange="updateManualPreview();" checked>
+        <span>Features Overview</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="includeSteps" onchange="updateManualPreview();" checked>
+        <span>Step-by-Step Instructions</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="includeTroubleshooting" onchange="updateManualPreview();">
+        <span>Troubleshooting</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="includeFAQ" onchange="updateManualPreview();">
+        <span>FAQ Section</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="includeScreenshots" onchange="updateManualPreview();">
+        <span>Screenshots & Images</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Preview Information -->
+  <div id="manualPreviewSection" class="preview-section hidden">
+    <h3>📋 Manual Preview</h3>
+    <div class="preview-content">
+      <div class="preview-item">
+        <strong>Manual Type:</strong>
+        <span id="previewManualType">-</span>
+      </div>
+      <div class="preview-item">
+        <strong>Target Audience:</strong>
+        <span id="previewAudience">-</span>
+      </div>
+      <div class="preview-item">
+        <strong>Output Format:</strong>
+        <span id="previewFormat">-</span>
+      </div>
+      <div class="preview-item">
+        <strong>Estimated Pages:</strong>
+        <span id="previewPages">-</span>
+      </div>
+      <div class="preview-item">
+        <strong>Included Sections:</strong>
+        <span id="previewSections">-</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="button-group">
+    <button id="generateManualBtn" class="btn btn-primary" onclick="generateUserManual()" disabled>
+      🚀 Generate Manual
+    </button>
+    <button class="btn btn-warning" onclick="resetManualForm()">
+      🔄 Reset
+    </button>
+  </div>
+
+  <!-- Download Section -->
+  <div id="downloadSection" class="preview-section hidden">
+    <h3>📥 Download Manual</h3>
+    <div class="preview-content">
+      <div class="preview-item">
+        <strong>Generated Manual:</strong>
+        <a id="manualDownloadLink" class="download-link disabled" onclick="downloadManual()">Click to download Manual</a>
+      </div>
+    </div>
+  </div>
+</div>
