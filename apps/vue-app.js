@@ -52,7 +52,7 @@ createApp({
     return {
       darkMode: false,
       sidebarCollapsed: false,
-      activeMainPage: 0,
+      activeMainPage: this.getInitialPage(),
 
       // Firmware tabs - 只保留 redmine 功能，其他簡化
       firmwareTabs: [
@@ -126,6 +126,46 @@ createApp({
     }
   },
   methods: {
+    // 獲取初始頁面狀態
+    getInitialPage() {
+      // 優先從 URL hash 讀取
+      const hash = window.location.hash;
+      if (hash) {
+        const pageMap = {
+          '#firmware': 0,
+          '#swpm': 1,
+          '#manual': 2
+        };
+        if (pageMap[hash] !== undefined) {
+          return pageMap[hash];
+        }
+      }
+
+      // 次優先從 localStorage 讀取
+      const savedPage = localStorage.getItem('activeMainPage');
+      if (savedPage !== null) {
+        const pageIndex = parseInt(savedPage);
+        if (pageIndex >= 0 && pageIndex <= 2) {
+          return pageIndex;
+        }
+      }
+
+      // 預設返回第一頁
+      return 0;
+    },
+
+    // 保存頁面狀態
+    savePageState(pageIndex) {
+      // 保存到 localStorage
+      localStorage.setItem('activeMainPage', pageIndex.toString());
+      
+      // 更新 URL hash
+      const pageHashes = ['#firmware', '#swpm', '#manual'];
+      if (pageHashes[pageIndex]) {
+        window.history.replaceState(null, '', pageHashes[pageIndex]);
+      }
+    },
+
     toggleSidebar() {
       this.sidebarCollapsed = !this.sidebarCollapsed;
       const sidebar = document.querySelector('.sidebar');
@@ -142,6 +182,9 @@ createApp({
     showMainPage(pageIndex) {
       this.activeMainPage = pageIndex;
       
+      // 保存頁面狀態
+      this.savePageState(pageIndex);
+
       // 如果切換到 User Manual 頁面 (pageIndex === 2)，自動載入第一個 tab
       if (pageIndex === 2) {
         this.$nextTick(() => {
@@ -487,7 +530,35 @@ createApp({
       }
     };
 
-    // 預設載入第一個 tab (Redmine)
-    this.loadRedmineModule();
+    // 監聽瀏覽器前進/後退按鈕
+    window.addEventListener('popstate', (event) => {
+      const newPage = this.getInitialPage();
+      if (newPage !== this.activeMainPage) {
+        this.activeMainPage = newPage;
+        this.loadModuleForPage(newPage);
+      }
+    });
+
+    // 根據當前頁面狀態載入相應的模組
+    this.loadModuleForPage(this.activeMainPage);
+  },
+
+  // 添加新方法來根據頁面載入模組
+  beforeMount() {
+    this.loadModuleForPage = (pageIndex) => {
+      switch (pageIndex) {
+        case 0: // Firmware Release
+          this.loadRedmineModule();
+          break;
+        case 1: // SWPM NoteBook
+          console.log('SWPM NoteBook - 無需特殊載入');
+          break;
+        case 2: // User Manual
+          this.loadGenerateManualModule();
+          break;
+        default:
+          this.loadRedmineModule();
+      }
+    };
   }
 }).mount('#app');

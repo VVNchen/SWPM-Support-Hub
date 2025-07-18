@@ -86,9 +86,9 @@ class UserManualFunctions {
     }
 
     // 綁定 checkbox 事件
-    const checkboxes = ['includeIntro', 'includeFeatures', 'includeSteps', 
-                       'includeTroubleshooting', 'includeFAQ', 'includeScreenshots'];
-    
+    const checkboxes = ['includeIntro', 'includeFeatures', 'includeSteps',
+      'includeTroubleshooting', 'includeFAQ', 'includeScreenshots'];
+
     checkboxes.forEach(id => {
       const checkbox = document.getElementById(id);
       if (checkbox) {
@@ -180,9 +180,9 @@ class UserManualFunctions {
 
   estimatePages(type, audience) {
     let basePage = 10;
-    
+
     // 根據手冊類型調整頁數
-    switch(type) {
+    switch (type) {
       case 'quick-start': basePage = 5; break;
       case 'user-guide': basePage = 25; break;
       case 'admin-guide': basePage = 20; break;
@@ -377,12 +377,12 @@ class UserManualFunctions {
   generateManualContent(manualType, format) {
     const sections = this.getIncludedSections();
     const currentDate = new Date().toISOString().split('T')[0];
-    
+
     let content = `${manualType}\n`;
     content += `Generated on: ${currentDate}\n`;
     content += `Included Sections: ${sections}\n\n`;
     content += `This is a generated user manual for the Firmware Release Workflow system.\n\n`;
-    
+
     if (format === 'html') {
       content = `
 <!DOCTYPE html>
@@ -429,9 +429,9 @@ class UserManualFunctions {
     if (formatSelect) formatSelect.value = '';
 
     // 重設 checkboxes
-    const checkboxes = ['includeIntro', 'includeFeatures', 'includeSteps', 
-                       'includeTroubleshooting', 'includeFAQ', 'includeScreenshots'];
-    
+    const checkboxes = ['includeIntro', 'includeFeatures', 'includeSteps',
+      'includeTroubleshooting', 'includeFAQ', 'includeScreenshots'];
+
     checkboxes.forEach(id => {
       const checkbox = document.getElementById(id);
       if (checkbox) {
