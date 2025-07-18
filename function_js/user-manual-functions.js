@@ -4,6 +4,7 @@ class UserManualFunctions {
     this.selectedAudience = '';
     this.selectedFormat = '';
     this.includedSections = [];
+    this.currentLang = 'en'; // 'en' or 'zh'
   }
 
   // 初始化模組
@@ -11,8 +12,8 @@ class UserManualFunctions {
     console.log('🚀 初始化 User Manual 模組...');
 
     try {
-      // 等待 DOM 元素載入
-      await this.waitForElement('#manualTypeSelect');
+      // 等待 FAQ 容器載入
+      await this.waitForElement('#faqSectionsContainer');
       console.log('✅ DOM 元素載入完成');
 
       // 綁定事件
@@ -22,6 +23,13 @@ class UserManualFunctions {
       // 初始化按鈕狀態
       this.updateGenerateButton();
       console.log('✅ 按鈕狀態初始化完成');
+      // 載入 FAQ CSV
+      await this.loadFAQ();
+      console.log('✅ FAQ CSV 載入完成');
+      // 綁定語言切換按鈕
+      this.bindLangToggle();
+      // 首次渲染 FAQ
+      this.renderFAQPage();
 
       console.log('✅ User Manual 模組初始化完成');
 
@@ -378,31 +386,70 @@ class UserManualFunctions {
     const sections = this.getIncludedSections();
     const currentDate = new Date().toISOString().split('T')[0];
 
-    let content = `${manualType}\n`;
-    content += `Generated on: ${currentDate}\n`;
-    content += `Included Sections: ${sections}\n\n`;
-    content += `This is a generated user manual for the Firmware Release Workflow system.\n\n`;
-
     if (format === 'html') {
-      content = `
-<!DOCTYPE html>
+      const faqHtml = this.generateFAQSections('html');
+      return `<!DOCTYPE html>
 <html>
 <head>
-    <title>${manualType}</title>
-    <meta charset="utf-8">
+  <title>${manualType}</title>
+  <meta charset="utf-8">
 </head>
 <body>
-    <h1>${manualType}</h1>
-    <p><strong>Generated on:</strong> ${currentDate}</p>
-    <p><strong>Included Sections:</strong> ${sections}</p>
-    <p>This is a generated user manual for the Firmware Release Workflow system.</p>
+  <h1>${manualType}</h1>
+  <p><strong>Generated on:</strong> ${currentDate}</p>
+  <p><strong>Included Sections:</strong> ${sections}</p>
+  <p>This is a generated user manual for the Firmware Release Workflow system.</p>
+  ${faqHtml}
 </body>
 </html>`;
     } else if (format === 'markdown') {
-      content = `# ${manualType}\n\n**Generated on:** ${currentDate}\n\n**Included Sections:** ${sections}\n\nThis is a generated user manual for the Firmware Release Workflow system.\n`;
+      const faqMd = this.generateFAQSections('markdown');
+      return `# ${manualType}
++
++**Generated on:** ${currentDate}
++
++**Included Sections:** ${sections}
++
++This is a generated user manual for the Firmware Release Workflow system.
++
++${faqMd}`;
+    } else {
+      return `${manualType}\nGenerated on: ${currentDate}\nIncluded Sections: ${sections}\n\n`;
     }
+  }
 
-    return content;
+  // 生成 FAQ 區段 (HTML or Markdown)
+  generateFAQSections(format = 'html') {
+    if (!this.faqRows || this.faqRows.length === 0) return '';
+    let output = '';
+    let currentCat = null;
+    let sectionCount = 0;
+    this.faqRows.forEach(row => {
+      const icon = row[0] || '';
+      const category = row[1] || '';
+      const content = (row[28] || '').replace(/\[.*?\]/g, '').trim();
+      const url = row[25] || '#';
+      if (!category || !content) return;
+      if (category !== currentCat) {
+        if (format === 'html') {
+          if (sectionCount % 2 === 0) output += '<div class="container">';
+          output += `<section class="block_wrapper"><div class="topic"><div class="title_icon">${icon}</div><p class="self_p">${category}</p></div><div class="content_wrapper">`;
+        } else {
+          output += `## ${category}\n`;
+        }
+        currentCat = category;
+        sectionCount++;
+      }
+      if (format === 'html') {
+        output += `<ul><li><a href="${url}">${content}</a></li></ul>`;
+        if (sectionCount % 2 === 0) {
+          output += '</div></section></div>';
+        }
+      } else {
+        output += `- [${content}](${url})\n`;
+      }
+    });
+    return output;
   }
 
   getContentType(format) {
@@ -449,6 +496,203 @@ class UserManualFunctions {
 
     this.updateGenerateButton();
     console.log('🔄 User Manual 表單已重設');
+  }
+
+  // 使用 SheetJS 載入 Multi-lang_FAQ.csv
+  async loadFAQ() {
+    try {
+      const response = await fetch('datasheet/Multi-lang_FAQ.csv');
+      const csvText = await response.text();
+      const workbook = XLSX.read(csvText, { type: 'string' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      this.faqHeader = rows[0] || [];
+      this.faqRows = rows.slice(1);
+    } catch (err) {
+      console.error('❌ 無法載入 FAQ CSV:', err);
+      this.faqRows = [];
+    }
+  }
+
+
+  // 綁定中英文切換按鈕
+  bindLangToggle() {
+    const enBtn = document.getElementById('langEnBtn');
+    const zhBtn = document.getElementById('langZhBtn');
+    if (enBtn && zhBtn) {
+      // 初始化按鈕狀態
+      enBtn.classList.toggle('active', this.currentLang === 'en');
+      zhBtn.classList.toggle('active', this.currentLang === 'zh');
+      // 點擊事件
+      enBtn.onclick = () => {
+        this.currentLang = 'en';
+        enBtn.classList.add('active');
+        zhBtn.classList.remove('active');
+        this.renderFAQPage();
+      };
+      zhBtn.onclick = () => {
+        this.currentLang = 'zh';
+        zhBtn.classList.add('active');
+        enBtn.classList.remove('active');
+        this.renderFAQPage();
+      };
+    }
+  }
+  // 渲染 FAQ 分類清單
+  renderFAQPage() {
+    const container = document.getElementById('faqSectionsContainer');
+    if (!container || !this.faqRows) return;
+    // 保存當前展開與勾選狀態
+    const prevDetails = container.querySelectorAll('details.faq-category');
+    const openCats = new Set();
+    prevDetails.forEach(d => {
+      if (d.open) {
+        const cat = d.querySelector('.faq-cat')?.textContent;
+        if (cat) openCats.add(cat);
+      }
+    });
+    const prevChecked = new Set(Array.from(container.querySelectorAll('.faq-item-checkbox:checked')).map(cb => cb.dataset.rowIdx));
+    container.innerHTML = '';
+    let currentCat = null;
+    this.faqRows.forEach((row, idx) => {
+      const iconHtml = row[0] || '';
+      const category = row[1] || '';
+      const url = row[25] || '#';
+      const contentIdx = this.currentLang === 'zh' ? 29 : 28;
+      let content = (row[contentIdx] || '').replace(/\[.*?\]/g, '').trim();
+      if (!category || !content) return;
+      if (category !== currentCat) {
+        currentCat = category;
+        const details = document.createElement('details');
+        details.className = 'faq-category';
+        // 恢復展開狀態
+        if (openCats.has(category)) details.open = true;
+        const summary = document.createElement('summary');
+        summary.innerHTML = `<span class='faq-icon'>${iconHtml}</span><span class='faq-cat'>${category}</span>`;
+        const selectAll = document.createElement('input');
+        selectAll.type = 'checkbox'; selectAll.className = 'select-all';
+        selectAll.title = 'Select all in this category';
+        selectAll.onchange = e => {
+          const checked = e.target.checked;
+          details.querySelectorAll('.faq-item-checkbox').forEach(cb => cb.checked = checked);
+          this.updateDownloadButtonState();
+        };
+        summary.prepend(selectAll);
+        details.appendChild(summary);
+        container.appendChild(details);
+      }
+      const lastDetails = container.lastElementChild;
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'faq-item';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.className = 'faq-item-checkbox'; cb.dataset.rowIdx = idx;
+      // 恢復勾選狀態
+      if (prevChecked.has(idx.toString())) cb.checked = true;
+      cb.onchange = () => this.updateDownloadButtonState();
+      const link = document.createElement('a');
+      link.href = url; link.target = '_blank'; link.textContent = content;
+      itemDiv.appendChild(cb); itemDiv.appendChild(link);
+      lastDetails.appendChild(itemDiv);
+    });
+    // 渲染語言選擇
+    this.renderLanguageCheckboxes();
+    // 綁定下載
+    this.bindDownloadButton();
+  }
+
+  // 渲染語言選擇框 (English/中文)
+  renderLanguageCheckboxes() {
+    const container = document.getElementById('languageCheckboxes');
+    if (!container) return;
+    container.innerHTML = '';
+    const langs = [{ code: 'en', label: 'English' }, { code: 'zh', label: '中文' }];
+    langs.forEach(lang => {
+      const label = document.createElement('label');
+      label.style.marginRight = '16px';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.value = lang.code; cb.className = 'lang-cb';
+      cb.onchange = () => this.updateDownloadButtonState();
+      label.append(cb, ` ${lang.label}`);
+      container.appendChild(label);
+    });
+  }
+
+  // 綁定下載按鈕
+  bindDownloadButton() {
+    const btn = document.getElementById('downloadFaqBtn');
+    if (!btn) return;
+    btn.onclick = () => this.downloadSelectedFaqs();
+    this.updateDownloadButtonState();
+  }
+
+  // 更新下載按鈕啟用狀態
+  updateDownloadButtonState() {
+    const anyItem = document.querySelectorAll('.faq-item-checkbox:checked').length > 0;
+    const anyLang = document.querySelectorAll('.lang-cb:checked').length > 0;
+    const btn = document.getElementById('downloadFaqBtn');
+    if (btn) btn.disabled = !(anyItem && anyLang);
+  }
+
+  // 下載選定的 FAQ
+  downloadSelectedFaqs() {
+    const selectedRows = Array.from(document.querySelectorAll('.faq-item-checkbox:checked')).map(cb => parseInt(cb.dataset.rowIdx));
+    const langs = Array.from(document.querySelectorAll('.lang-cb:checked')).map(cb => cb.value);
+    if (!selectedRows.length || !langs.length) return;
+    langs.forEach(lang => {
+      const idx = lang === 'zh' ? 29 : 28;
+      let content = '';
+      let currentCat = null;
+      selectedRows.forEach(rIdx => {
+        const row = this.faqRows[rIdx];
+        const category = row[1];
+        const text = (row[idx] || '').replace(/\[.*?\]/g, '').trim();
+        const url = row[25] || '';
+        if (!category || !text) return;
+        if (category !== currentCat) {
+          content += `## ${category}\n`;
+          currentCat = category;
+        }
+        content += `- ${text} (${url})\n`;
+      });
+      const blob = new Blob([content], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `FAQ_${lang}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  }
+
+  // 下載所有 FAQ
+  downloadAllFaqs() {
+    const langIdx = this.currentLang === 'zh' ? 29 : 28;
+    let content = '';
+    let currentCat = null;
+    this.faqRows.forEach(row => {
+      const category = row[1];
+      const text = (row[langIdx] || '').replace(/\[.*?\]/g, '').trim();
+      const url = row[25] || '';
+      if (!category || !text) return;
+      if (category !== currentCat) {
+        content += `## ${category}\n`;
+        currentCat = category;
+      }
+      content += `- ${text} (${url})\n`;
+    });
+    const blob = new Blob([content], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `FAQ_${this.currentLang}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  // 測試用：直接載入 FAQ 資料
+  loadFAQData(rows) {
+    this.faqRows = rows;
+    this.renderFAQPage();
   }
 
   // 顯示成功訊息

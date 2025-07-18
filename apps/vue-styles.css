@@ -144,10 +144,9 @@
 
 .label-icon {
   margin-right: 8px;
-  font-size: 18px;
-}
-
-.label-text {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   flex-grow: 1;
 }
 
@@ -852,6 +851,114 @@
   color: #e0e0e0;
 }
 
+/* Language toggle button adjustments */
+.lang-toggle {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+/* Language labels inside switch */
+.slider:after {
+  content: 'EN';
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: #000;
+  pointer-events: none;
+}
+
+.switch input:checked+.slider:after {
+  content: '中';
+  left: auto;
+  right: 8px;
+  color: #fff;
+}
+
+.switch input:checked+.slider {
+  background-color: var(--btn-bg);
+}
+
+.switch input:checked+.slider:before {
+  transform: translateX(26px);
+}
+
+.switch-label {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background-color: #e9ecef;
+  color: #495057;
+  font-size: 14px;
+  cursor: default;
+  user-select: none;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 0 4px;
+}
+
+.switch-label.active-label {
+  background-color: var(--btn-bg);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.lang-toggle .btn {
+  /* 固定寬度以統一按鈕大小 */
+  width: 120px;
+  /* 使用 flex 將文字水平與垂直置中 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.lang-toggle .btn.active {
+  background-color: var(--btn-bg) !important;
+  color: white !important;
+  border-color: var(--btn-bg) !important;
+}
+
 /* Responsive design for User Manual */
 @media (max-width: 768px) {
   .user-manual-container {
@@ -862,4 +969,132 @@
     grid-template-columns: 1fr;
     gap: 8px;
   }
+}
+
+/* FAQ card styling */
+.faq-sections details.faq-category {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  text-align: left;
+  /* Ensure category container text aligns left */
+}
+
+/* FAQ card summary style */
+.faq-sections summary {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  /* Align header text to the left */
+  padding: 16px;
+  cursor: pointer;
+  background-color: #e6f7ff;
+  border-left: 4px solid #007bff;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  text-align: left;
+}
+
+.faq-sections summary:hover {
+  background-color: #f5faff;
+}
+
+.faq-sections details.faq-category[open]>summary {
+  background-color: #cceeff;
+}
+
+/* Hide default marker */
+.faq-sections summary::-webkit-details-marker,
+.faq-sections summary::marker {
+  display: none;
+}
+
+.faq-sections summary .select-all {
+  margin-right: 8px;
+}
+
+.faq-sections summary .faq-icon {
+  margin-right: 8px;
+  display: inline-flex;
+}
+
+.faq-sections summary .faq-cat {
+  flex-grow: 1;
+}
+
+.faq-sections details.faq-category[open] summary {
+  background-color: #e9e9e9;
+}
+
+.faq-sections .faq-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #ffffff;
+  margin: 4px 0;
+  border-radius: 4px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  /* gray separator between items */
+}
+
+/* Ensure FAQ item links align left */
+.faq-sections .faq-item a {
+  flex: 1;
+  text-align: left;
+  display: inline-block;
+}
+
+.faq-sections .faq-item-checkbox {
+  margin-right: 8px;
+}
+
+.faq-sections .faq-item-checkbox,
+.faq-sections summary .select-all {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #007bff;
+  border-radius: 2px;
+  margin-right: 4px;
+  padding: 8px;
+  /* clickable area padding */
+  cursor: pointer;
+  position: relative;
+  background-color: #fff;
+  flex-shrink: 0;
+}
+
+.faq-sections .faq-item-checkbox:checked,
+.faq-sections summary .select-all:checked {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.faq-sections .faq-item-checkbox:checked::after,
+.faq-sections summary .select-all:checked::after {
+  content: '✔';
+  /* heavier check symbol */
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fff;
+  font-size: 15px;
+  line-height: 15px;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+  /* subtle shadow for contrast */
+}
+
+/* Row container for language labels */
+.lang-toggle .label-row {
+  display: flex;
+  gap: 8px;
 }

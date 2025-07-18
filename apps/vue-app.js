@@ -150,7 +150,7 @@ createApp({
     savePageState(pageIndex) {
       // 保存到 localStorage
       localStorage.setItem('activeMainPage', pageIndex.toString());
-      
+
       // 更新 URL hash
       const pageHashes = ['#firmware', '#swpm', '#manual'];
       if (pageHashes[pageIndex]) {
@@ -173,7 +173,7 @@ createApp({
 
     showMainPage(pageIndex) {
       this.activeMainPage = pageIndex;
-      
+
       // 保存頁面狀態
       this.savePageState(pageIndex);
 
