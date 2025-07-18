@@ -445,9 +445,9 @@ h1,
 .preview-area {
   background: #f8f9fa;
   border: 1px solid #dee2e6;
-  border-radius: 4px;
+  border-left: 4px solid #28a745;
+  border-radius: 8px;
   padding: 15px;
-  min-height: 150px;
   margin-bottom: 20px;
 }
 
@@ -466,15 +466,53 @@ h1,
 
 .variable-highlight {
   background: #fff3cd;
-  padding: 2px 4px;
-  border-radius: 3px;
-  color: #856404;
+  border: 1px solid #dee2e6;
+  border-left: 4px solid #28a745;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 20px;
+  /* min-height removed for flexible content height */
 }
 
-/* Sync Module 樣式 */
+/* FAQ Download 區塊排版 */
+.preview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preview-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview-item strong {
+  min-width: 100px;
+  font-weight: bold;
+}
+
 .sync-controls {
   display: flex;
   justify-content: space-between;
+
+  .preview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .preview-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .preview-item strong {
+    min-width: 100px;
+    font-weight: bold;
+  }
+
   align-items: center;
   margin-bottom: 25px;
   gap: 20px;
