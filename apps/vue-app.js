@@ -207,7 +207,7 @@ createApp({
 
     onSwpmTabChanged(tabIndex) {
       console.log('SWPM tab 切換至:', tabIndex);
-      
+
       // 載入對應的 SWPM 模組
       switch (tabIndex) {
         case 0: // Frequent Links
@@ -247,7 +247,7 @@ createApp({
 
       } catch (error) {
         console.error('❌ 載入常用連結模組失敗:', error);
-        
+
         // 顯示錯誤訊息
         const frequentLinksTab = this.swpmTabs.find(tab => tab.name === 'Frequent Links');
         if (frequentLinksTab) {
@@ -579,7 +579,7 @@ createApp({
           this.loadRedmineModule();
           break;
         case 1: // SWPM NoteBook
-          console.log('SWPM NoteBook - 無需特殊載入');
+          this.loadFrequentLinksModule();
           break;
         case 2: // User Manual
           this.loadGenerateManualModule();
