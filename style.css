@@ -483,13 +483,121 @@ h1,
 
 .preview-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
 }
 
 .preview-item strong {
-  min-width: 100px;
+  min-width: 120px;
   font-weight: bold;
+  margin-top: 8px;
+}
+
+/* 語言選擇容器 */
+.language-selection-container {
+  flex: 1;
+}
+
+.language-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 14px;
+  min-width: auto;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #6c757d;
+  color: #6c757d;
+}
+
+.btn-outline:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+.language-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.language-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  background-color: var(--card-color);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.language-item:hover {
+  border-color: #007bff;
+  background-color: #f8f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
+}
+
+.language-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: #007bff;
+}
+
+.language-item input[type="checkbox"]:checked + .language-label {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.language-item:has(input:checked) {
+  border-color: #007bff;
+  background-color: #f0f7ff;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+}
+
+.language-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex: 1;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.language-flag {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.language-name {
+  font-weight: 500;
+}
+
+/* Dark mode support for language selection */
+body.dark .language-item {
+  border-color: #495057;
+  background-color: var(--card-color);
+}
+
+body.dark .language-item:hover {
+  border-color: #4d90fe;
+  background-color: #2a3441;
+}
+
+body.dark .language-item:has(input:checked) {
+  border-color: #4d90fe;
+  background-color: #1e2a3a;
 }
 
 .sync-controls {

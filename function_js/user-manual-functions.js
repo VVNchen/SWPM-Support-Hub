@@ -608,17 +608,63 @@ class UserManualFunctions {
   renderLanguageCheckboxes() {
     const container = document.getElementById('languageCheckboxes');
     if (!container) return;
+    
     container.innerHTML = '';
-    const langs = [{ code: 'en', label: 'English' }, { code: 'zh', label: '中文' }];
+    const langs = [
+      { code: 'en', label: 'English', flag: '🇺🇸' }, 
+      { code: 'zh', label: '中文', flag: '🇹🇼' }
+    ];
+    
     langs.forEach(lang => {
+      const langItem = document.createElement('div');
+      langItem.className = 'language-item';
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = lang.code;
+      checkbox.className = 'lang-cb';
+      checkbox.id = `lang-${lang.code}`;
+      checkbox.onchange = () => this.updateDownloadButtonState();
+      
       const label = document.createElement('label');
-      label.style.marginRight = '16px';
-      const cb = document.createElement('input');
-      cb.type = 'checkbox'; cb.value = lang.code; cb.className = 'lang-cb';
-      cb.onchange = () => this.updateDownloadButtonState();
-      label.append(cb, ` ${lang.label}`);
-      container.appendChild(label);
+      label.htmlFor = `lang-${lang.code}`;
+      label.className = 'language-label';
+      label.innerHTML = `
+        <span class="language-flag">${lang.flag}</span>
+        <span class="language-name">${lang.label}</span>
+      `;
+      
+      langItem.appendChild(checkbox);
+      langItem.appendChild(label);
+      container.appendChild(langItem);
     });
+
+    // 綁定全選/清除按鈕
+    this.bindLanguageControls();
+  }
+
+  // 綁定語言控制按鈕
+  bindLanguageControls() {
+    const selectAllBtn = document.getElementById('selectAllLangsBtn');
+    const clearAllBtn = document.getElementById('clearAllLangsBtn');
+    
+    if (selectAllBtn) {
+      selectAllBtn.onclick = () => {
+        document.querySelectorAll('.lang-cb').forEach(cb => {
+          cb.checked = true;
+        });
+        this.updateDownloadButtonState();
+      };
+    }
+    
+    if (clearAllBtn) {
+      clearAllBtn.onclick = () => {
+        document.querySelectorAll('.lang-cb').forEach(cb => {
+          cb.checked = false;
+        });
+        this.updateDownloadButtonState();
+      };
+    }
   }
 
   // 綁定下載按鈕
