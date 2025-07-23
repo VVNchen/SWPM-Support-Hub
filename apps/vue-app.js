@@ -85,11 +85,11 @@ createApp({
         }
       ],
 
-      // SWPM tabs - 簡化版本
+      // SWPM tabs - 動態載入版本
       swpmTabs: [
         {
           name: 'Frequent Links',
-          content: '<div style="padding: 20px;"><h2>Common Links</h2><p>常用連結功能開發中...</p></div>'
+          content: '<div style="padding: 20px; text-align: center;"><h2>⏳ 載入中...</h2><p>正在載入常用連結...</p></div>'
         },
         {
           name: 'Note2',
@@ -207,6 +207,16 @@ createApp({
 
     onSwpmTabChanged(tabIndex) {
       console.log('SWPM tab 切換至:', tabIndex);
+      
+      // 載入對應的 SWPM 模組
+      switch (tabIndex) {
+        case 0: // Frequent Links
+          this.loadFrequentLinksModule();
+          break;
+        case 1: // Note2
+          // 預留給 Note2 的載入邏輯
+          break;
+      }
     },
 
     onUserManualTabChanged(tabIndex) {
@@ -215,6 +225,40 @@ createApp({
       // 只有一個 tab: Generate Manual
       if (tabIndex === 0) {
         this.loadGenerateManualModule();
+      }
+    },
+
+    // 載入常用連結模組
+    async loadFrequentLinksModule() {
+      console.log('📥 載入常用連結模組...');
+
+      try {
+        // 載入 HTML 模板
+        const htmlResponse = await fetch('pages/swpm/frequent_link.html');
+        const htmlContent = await htmlResponse.text();
+
+        // 更新 tab 內容
+        const frequentLinksTab = this.swpmTabs.find(tab => tab.name === 'Frequent Links');
+        if (frequentLinksTab) {
+          frequentLinksTab.content = htmlContent;
+        }
+
+        console.log('✅ 常用連結模組載入完成');
+
+      } catch (error) {
+        console.error('❌ 載入常用連結模組失敗:', error);
+        
+        // 顯示錯誤訊息
+        const frequentLinksTab = this.swpmTabs.find(tab => tab.name === 'Frequent Links');
+        if (frequentLinksTab) {
+          frequentLinksTab.content = `
+            <div style="padding: 20px; text-align: center;">
+              <h2>❌ 載入失敗</h2>
+              <p>無法載入常用連結模組</p>
+              <p style="color: #666; font-size: 0.9em;">錯誤: ${error.message}</p>
+            </div>
+          `;
+        }
       }
     },
 
