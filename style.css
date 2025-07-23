@@ -555,7 +555,7 @@ h1,
   accent-color: #007bff;
 }
 
-.language-item input[type="checkbox"]:checked + .language-label {
+.language-item input[type="checkbox"]:checked+.language-label {
   color: #007bff;
   font-weight: 600;
 }

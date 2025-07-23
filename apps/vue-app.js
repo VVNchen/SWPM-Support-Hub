@@ -88,8 +88,8 @@ createApp({
       // SWPM tabs - 簡化版本
       swpmTabs: [
         {
-          name: 'Note1',
-          content: '<div style="padding: 20px;"><h2>SWPM Note 1</h2><p>筆記功能開發中...</p></div>'
+          name: 'Frequent Links',
+          content: '<div style="padding: 20px;"><h2>Common Links</h2><p>常用連結功能開發中...</p></div>'
         },
         {
           name: 'Note2',

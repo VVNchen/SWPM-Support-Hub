@@ -608,24 +608,24 @@ class UserManualFunctions {
   renderLanguageCheckboxes() {
     const container = document.getElementById('languageCheckboxes');
     if (!container) return;
-    
+
     container.innerHTML = '';
     const langs = [
-      { code: 'en', label: 'English', flag: '🇺🇸' }, 
+      { code: 'en', label: 'English', flag: '🇺🇸' },
       { code: 'zh', label: '中文', flag: '🇹🇼' }
     ];
-    
+
     langs.forEach(lang => {
       const langItem = document.createElement('div');
       langItem.className = 'language-item';
-      
+
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.value = lang.code;
       checkbox.className = 'lang-cb';
       checkbox.id = `lang-${lang.code}`;
       checkbox.onchange = () => this.updateDownloadButtonState();
-      
+
       const label = document.createElement('label');
       label.htmlFor = `lang-${lang.code}`;
       label.className = 'language-label';
@@ -633,7 +633,7 @@ class UserManualFunctions {
         <span class="language-flag">${lang.flag}</span>
         <span class="language-name">${lang.label}</span>
       `;
-      
+
       langItem.appendChild(checkbox);
       langItem.appendChild(label);
       container.appendChild(langItem);
@@ -647,7 +647,7 @@ class UserManualFunctions {
   bindLanguageControls() {
     const selectAllBtn = document.getElementById('selectAllLangsBtn');
     const clearAllBtn = document.getElementById('clearAllLangsBtn');
-    
+
     if (selectAllBtn) {
       selectAllBtn.onclick = () => {
         document.querySelectorAll('.lang-cb').forEach(cb => {
@@ -656,7 +656,7 @@ class UserManualFunctions {
         this.updateDownloadButtonState();
       };
     }
-    
+
     if (clearAllBtn) {
       clearAllBtn.onclick = () => {
         document.querySelectorAll('.lang-cb').forEach(cb => {
