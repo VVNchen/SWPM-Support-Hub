@@ -177,8 +177,14 @@ createApp({
       // 保存頁面狀態
       this.savePageState(pageIndex);
 
-      // 如果切換到 User Manual 頁面 (pageIndex === 2)，自動載入第一個 tab
-      if (pageIndex === 2) {
+      // 根據切換的頁面載入對應的模組
+      if (pageIndex === 1) {
+        // SWPM NoteBook - 載入常用連結模組
+        this.$nextTick(() => {
+          this.loadFrequentLinksModule();
+        });
+      } else if (pageIndex === 2) {
+        // User Manual - 載入第一個 tab
         this.$nextTick(() => {
           this.loadGenerateManualModule();
         });
